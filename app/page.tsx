@@ -16,6 +16,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [backendUrl, setBackendUrl] = useState('http://localhost:3000');
+  const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; content: string }>>([]);
+  const [compactedCount, setCompactedCount] = useState(0);
+  const [totalTokens, setTotalTokens] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -41,6 +45,7 @@ export default function Home() {
           message: inputMessage,
           difficulty,
           topic: topic || undefined,
+          history: conversationHistory,
         }),
       });
 
@@ -57,6 +62,22 @@ export default function Home() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Update conversation history from backend
+      setConversationHistory(data.history || []);
+
+      // Track if conversation was compacted
+      if (data.compacted) {
+        setCompactedCount((prev) => prev + 1);
+        console.log('✨ Conversation compacted to save costs!');
+      }
+
+      // Track token usage and costs
+      if (data.tokenUsage) {
+        setTotalTokens((prev) => prev + data.tokenUsage.totalTokens);
+        setTotalCost((prev) => prev + data.tokenUsage.estimatedCost);
+        console.log('💰 Token Usage:', data.tokenUsage);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
       console.error('Error sending message:', err);
@@ -74,6 +95,10 @@ export default function Home() {
 
   const clearChat = () => {
     setMessages([]);
+    setConversationHistory([]);
+    setCompactedCount(0);
+    setTotalTokens(0);
+    setTotalCost(0);
     setError('');
   };
 
@@ -88,6 +113,27 @@ export default function Home() {
           <p className="text-gray-600 dark:text-gray-300">
             Test your Cerebras + LLaMA integration
           </p>
+          {messages.length > 0 && (
+            <div className="mt-3 space-y-2">
+              <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
+                <span>💬 Messages: {messages.length}</span>
+                <span>📝 History: {conversationHistory.length}</span>
+                {compactedCount > 0 && (
+                  <span className="text-green-600 dark:text-green-400">
+                    ✨ Compacted {compactedCount}x
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-4 text-sm font-mono">
+                <span className="text-blue-600 dark:text-blue-400">
+                  🔢 Tokens: {totalTokens.toLocaleString()}
+                </span>
+                <span className="text-green-600 dark:text-green-400">
+                  💰 Cost: ${totalCost.toFixed(6)}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Settings Panel */}
