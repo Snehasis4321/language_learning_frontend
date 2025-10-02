@@ -20,6 +20,8 @@ export default function Home() {
   const [compactedCount, setCompactedCount] = useState(0);
   const [totalTokens, setTotalTokens] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -93,6 +95,65 @@ export default function Home() {
     }
   };
 
+  const playAudio = async (text: string, index: number) => {
+    try {
+      // Stop any currently playing audio
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.src = '';
+      }
+
+      setPlayingIndex(index);
+
+      // Call backend to generate TTS
+      const response = await fetch(`${backendUrl}/api/conversation/tts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`TTS failed: ${response.status}`);
+      }
+
+      // Get audio blob
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      // Create and play audio
+      const audio = new Audio(audioUrl);
+      setAudioElement(audio);
+
+      audio.onended = () => {
+        setPlayingIndex(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        setPlayingIndex(null);
+        setError('Failed to play audio');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error('Error playing audio:', err);
+      setError(err instanceof Error ? err.message : 'Failed to play audio');
+      setPlayingIndex(null);
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.src = '';
+      setAudioElement(null);
+    }
+    setPlayingIndex(null);
+  };
+
   const clearChat = () => {
     setMessages([]);
     setConversationHistory([]);
@@ -100,6 +161,7 @@ export default function Home() {
     setTotalTokens(0);
     setTotalCost(0);
     setError('');
+    stopAudio();
   };
 
   return (
@@ -214,13 +276,27 @@ export default function Home() {
                       </span>
                       <div className="flex-1">
                         <p className="whitespace-pre-wrap">{message.content}</p>
-                        <p
-                          className={`text-xs mt-1 ${
-                            message.role === 'user' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
-                          }`}
-                        >
-                          {message.timestamp.toLocaleTimeString()}
-                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <p
+                            className={`text-xs ${
+                              message.role === 'user' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                            }`}
+                          >
+                            {message.timestamp.toLocaleTimeString()}
+                          </p>
+                          {message.role === 'assistant' && (
+                            <button
+                              onClick={() =>
+                                playingIndex === index ? stopAudio() : playAudio(message.content, index)
+                              }
+                              disabled={playingIndex !== null && playingIndex !== index}
+                              className="text-xs px-2 py-1 rounded bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              title={playingIndex === index ? 'Stop' : 'Play audio'}
+                            >
+                              {playingIndex === index ? '⏸️ Stop' : '🔊 Play'}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
