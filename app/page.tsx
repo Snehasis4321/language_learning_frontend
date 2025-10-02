@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -169,9 +170,17 @@ export default function Home() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-4">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
-            🎓 AI Language Teacher - Backend Test
-          </h1>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+              🎓 AI Language Teacher - Text Chat
+            </h1>
+            <Link
+              href="/voice"
+              className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+            >
+              🎤 Try Voice Chat
+            </Link>
+          </div>
           <p className="text-gray-600 dark:text-gray-300">
             Test your Cerebras + LLaMA integration
           </p>
