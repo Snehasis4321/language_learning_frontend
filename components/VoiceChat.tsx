@@ -9,6 +9,8 @@ import {
   DisconnectButton,
   useConnectionState,
   useRoomInfo,
+  useTranscriptions,
+  useLocalParticipant,
 } from '@livekit/components-react';
 import { ConnectionState } from 'livekit-client';
 import '@livekit/components-styles';
@@ -21,6 +23,14 @@ function VoiceAssistantUI() {
   const { state, audioTrack } = useVoiceAssistant();
   const connectionState = useConnectionState();
   const roomInfo = useRoomInfo();
+  const allTranscriptions = useTranscriptions();
+  const { localParticipant } = useLocalParticipant();
+
+  // Debug: Log transcriptions when they change
+  useEffect(() => {
+    console.log('🔍 Transcriptions updated:', allTranscriptions);
+    console.log('🔍 Number of transcriptions:', allTranscriptions.length);
+  }, [allTranscriptions]);
 
   return (
     <div className="space-y-4">
@@ -87,6 +97,35 @@ function VoiceAssistantUI() {
           )}
         </div>
       </div>
+
+      {/* Transcription Display */}
+      {allTranscriptions.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">
+            📝 Conversation Transcript
+          </h3>
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {allTranscriptions.map((transcription, idx) => {
+              const isUser = transcription.participantInfo?.identity === localParticipant?.identity;
+              return (
+                <div
+                  key={transcription.streamInfo?.streamId || idx}
+                  className={`p-2 mb-2 rounded text-sm ${
+                    isUser
+                      ? 'bg-blue-100 dark:bg-blue-900 ml-8'
+                      : 'bg-gray-100 dark:bg-gray-700 mr-8'
+                  }`}
+                >
+                  <p className="text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">
+                    {isUser ? 'You' : 'AI Teacher'}
+                  </p>
+                  <p className="text-gray-800 dark:text-gray-200">{transcription.text}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Instructions */}
       <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
