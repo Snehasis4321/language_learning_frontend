@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface Message {
@@ -203,38 +204,38 @@ export default function Home() {
       <div className="relative max-w-5xl mx-auto">
         {/* Header */}
         <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">🎓</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
+                <Image src="/logo.png" alt="AI Language Teacher" width={56} height={56} className="object-cover" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                   AI Language Teacher
                 </h1>
                 {userName && (
-                  <p className="text-sm text-gray-600 mt-0.5">
-                    Welcome back, <strong>{userName}</strong>! 👋
+                  <p className="text-sm text-gray-600 mt-1">
+                    Welcome back, <strong className="text-blue-700">{userName}</strong>!
                   </p>
                 )}
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Link
                 href="/onboarding"
-                className={`px-4 py-2 rounded-xl transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
+                className={`px-5 py-2.5 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 ${
                   userId
                     ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700'
                 }`}
               >
-                {userId ? '✏️ Edit Preferences' : '✨ Create Profile'}
+                <span>{userId ? 'Edit Preferences' : 'Create Profile'}</span>
               </Link>
               <Link
                 href="/voice"
-                className="px-4 py-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="px-5 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2"
               >
-                🎤 Voice Chat
+                <span>Voice Chat</span>
               </Link>
             </div>
           </div>
@@ -311,40 +312,27 @@ export default function Home() {
                         : 'bg-white border-2 border-gray-200 text-gray-800'
                     }`}
                   >
-                    <div className="flex items-start gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        message.role === 'user'
-                          ? 'bg-white/20'
-                          : 'bg-gradient-to-r from-blue-600 to-cyan-600'
-                      }`}>
-                        <span className={`text-lg ${message.role === 'user' ? '' : 'filter brightness-0 invert'}`}>
-                          {message.role === 'user' ? '👤' : '🤖'}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <p
-                            className={`text-xs ${
-                              message.role === 'user' ? 'text-white/70' : 'text-gray-500'
-                            }`}
-                          >
-                            {message.timestamp.toLocaleTimeString()}
-                          </p>
-                          {message.role === 'assistant' && (
-                            <button
-                              onClick={() =>
-                                playingIndex === index ? stopAudio() : playAudio(message.content, index)
-                              }
-                              disabled={playingIndex !== null && playingIndex !== index}
-                              className="text-xs px-2 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                              title={playingIndex === index ? 'Stop' : 'Play audio'}
-                            >
-                              {playingIndex === index ? '⏸️ Stop' : '🔊 Play'}
-                            </button>
-                          )}
-                        </div>
-                      </div>
+                    <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <div className="flex items-center gap-2 mt-3">
+                      <p
+                        className={`text-xs ${
+                          message.role === 'user' ? 'text-white/70' : 'text-gray-500'
+                        }`}
+                      >
+                        {message.timestamp.toLocaleTimeString()}
+                      </p>
+                      {message.role === 'assistant' && (
+                        <button
+                          onClick={() =>
+                            playingIndex === index ? stopAudio() : playAudio(message.content, index)
+                          }
+                          disabled={playingIndex !== null && playingIndex !== index}
+                          className="text-xs px-2 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                          title={playingIndex === index ? 'Stop' : 'Play audio'}
+                        >
+                          {playingIndex === index ? '⏸️ Stop' : '🔊 Play'}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -352,15 +340,10 @@ export default function Home() {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 shadow-md">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center">
-                        <span className="text-lg filter brightness-0 invert">🤖</span>
-                      </div>
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 bg-teal-600 rounded-full animate-bounce delay-200"></div>
-                      </div>
+                    <div className="flex gap-2">
+                      <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce delay-100"></div>
+                      <div className="w-2 h-2 bg-teal-600 rounded-full animate-bounce delay-200"></div>
                     </div>
                   </div>
                 </div>

@@ -2,6 +2,7 @@
 
 import VoiceChat from '@/components/VoiceChat';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function VoiceChatPage() {
   return (
@@ -17,8 +18,8 @@ export default function VoiceChatPage() {
         <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">🎤</span>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+                <Image src="/logo.png" alt="AI Voice Chat" width={48} height={48} className="object-cover" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">

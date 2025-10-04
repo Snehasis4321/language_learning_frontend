@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface UserProfile {
@@ -107,9 +108,14 @@ export default function ProfilePage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
-            👤 Your Profile
-          </h1>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+              <Image src="/logo.png" alt="Your Profile" width={48} height={48} className="object-cover" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+              Your Profile
+            </h1>
+          </div>
           <Link
             href="/"
             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"

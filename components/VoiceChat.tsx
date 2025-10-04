@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   LiveKitRoom,
   RoomAudioRenderer,
@@ -262,8 +263,8 @@ export default function VoiceChat({ backendUrl = 'http://localhost:3000' }: Voic
       <div className="max-w-2xl mx-auto">
         <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <span className="text-4xl">🎤</span>
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden">
+              <Image src="/logo.png" alt="Voice Chat" width={80} height={80} className="object-cover" />
             </div>
             <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Start Voice Conversation

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function LoginPage() {
@@ -52,8 +53,8 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         {/* Logo/Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
-            <span className="text-4xl">🌍</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4 overflow-hidden">
+            <Image src="/logo.png" alt="Language Learning" width={64} height={64} className="object-cover" />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">
             Language Learning
