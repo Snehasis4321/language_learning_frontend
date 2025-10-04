@@ -193,131 +193,108 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 p-4">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative max-w-5xl mx-auto">
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-4">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4">
           <div className="flex items-center justify-between mb-2">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
-                🎓 AI Language Teacher - Text Chat
-              </h1>
-              {userName && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Welcome back, {userName}! 👋
-                </p>
-              )}
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-2xl">🎓</span>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                  AI Language Teacher
+                </h1>
+                {userName && (
+                  <p className="text-sm text-gray-600 mt-0.5">
+                    Welcome back, <strong>{userName}</strong>! 👋
+                  </p>
+                )}
+              </div>
             </div>
             <div className="flex gap-2">
               <Link
                 href="/onboarding"
-                className={`px-4 py-2 rounded-md transition-colors ${
+                className={`px-4 py-2 rounded-xl transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
                   userId
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600'
-                    : 'bg-green-500 text-white hover:bg-green-600'
+                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700'
                 }`}
               >
                 {userId ? '✏️ Edit Preferences' : '✨ Create Profile'}
               </Link>
               <Link
                 href="/voice"
-                className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
-                🎤 Try Voice Chat
+                🎤 Voice Chat
               </Link>
             </div>
           </div>
-          <p className="text-gray-600 dark:text-gray-300">
-            Test your Cerebras + LLaMA integration
-          </p>
+
           {messages.length > 0 && (
-            <div className="mt-3 space-y-2">
-              <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
-                <span>💬 Messages: {messages.length}</span>
-                <span>📝 History: {conversationHistory.length}</span>
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex flex-wrap gap-4 text-sm">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
+                  <span>💬</span>
+                  <span className="text-gray-700"><strong>{messages.length}</strong> messages</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-50 rounded-lg">
+                  <span>📝</span>
+                  <span className="text-gray-700"><strong>{conversationHistory.length}</strong> in history</span>
+                </div>
                 {compactedCount > 0 && (
-                  <span className="text-green-600 dark:text-green-400">
-                    ✨ Compacted {compactedCount}x
-                  </span>
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
+                    <span>✨</span>
+                    <span className="text-green-700"><strong>Compacted {compactedCount}x</strong></span>
+                  </div>
                 )}
-              </div>
-              <div className="flex gap-4 text-sm font-mono">
-                <span className="text-blue-600 dark:text-blue-400">
-                  🔢 Tokens: {totalTokens.toLocaleString()}
-                </span>
-                <span className="text-green-600 dark:text-green-400">
-                  💰 Cost: ${totalCost.toFixed(6)}
-                </span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
+                  <span>🔢</span>
+                  <span className="text-gray-700"><strong>{totalTokens.toLocaleString()}</strong> tokens</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
+                  <span>💰</span>
+                  <span className="text-green-700"><strong>${totalCost.toFixed(6)}</strong></span>
+                </div>
               </div>
             </div>
           )}
         </div>
 
         {/* Personalization Notice */}
-        {userId && (
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
-              ✨ <strong>Personalized Learning Active!</strong> Your AI teacher is adapting to your learning style, goals, and preferences.
-            </p>
+        {userPreferences && (
+          <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-4 mb-4 border-2 border-blue-200">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <span className="text-xl">✨</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-800">
+                  <strong className="text-blue-700">Personalized Learning Active!</strong> Your AI teacher is adapting to your learning style, goals, and preferences.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Settings Panel */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Backend URL
-              </label>
-              <input
-                type="text"
-                value={backendUrl}
-                onChange={(e) => setBackendUrl(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Difficulty Level
-              </label>
-              <select
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value as typeof difficulty)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Topic (Optional)
-              </label>
-              <input
-                type="text"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                placeholder="e.g., Travel, Food, Business"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
-            </div>
-          </div>
-          <button
-            onClick={clearChat}
-            className="mt-3 px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-          >
-            Clear Chat
-          </button>
-        </div>
-
         {/* Chat Messages */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-4 h-[500px] overflow-y-auto">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4 h-[550px] overflow-y-auto">
           {messages.length === 0 ? (
-            <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
+            <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <p className="text-xl mb-2">👋 Start a conversation!</p>
-                <p className="text-sm">Type a message below to test your backend</p>
+                <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <span className="text-4xl">💬</span>
+                </div>
+                <p className="text-xl font-semibold text-gray-700 mb-2">Start your conversation!</p>
+                <p className="text-sm text-gray-500">Type a message below to begin learning</p>
               </div>
             </div>
           ) : (
@@ -328,22 +305,28 @@ export default function Home() {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
+                    className={`max-w-[80%] rounded-2xl p-4 shadow-md ${
                       message.role === 'user'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white'
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
+                        : 'bg-white border-2 border-gray-200 text-gray-800'
                     }`}
                   >
                     <div className="flex items-start gap-2">
-                      <span className="text-lg">
-                        {message.role === 'user' ? '👤' : '🤖'}
-                      </span>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        message.role === 'user'
+                          ? 'bg-white/20'
+                          : 'bg-gradient-to-r from-blue-600 to-cyan-600'
+                      }`}>
+                        <span className={`text-lg ${message.role === 'user' ? '' : 'filter brightness-0 invert'}`}>
+                          {message.role === 'user' ? '👤' : '🤖'}
+                        </span>
+                      </div>
                       <div className="flex-1">
-                        <p className="whitespace-pre-wrap">{message.content}</p>
-                        <div className="flex items-center gap-2 mt-1">
+                        <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                        <div className="flex items-center gap-2 mt-2">
                           <p
                             className={`text-xs ${
-                              message.role === 'user' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                              message.role === 'user' ? 'text-white/70' : 'text-gray-500'
                             }`}
                           >
                             {message.timestamp.toLocaleTimeString()}
@@ -354,7 +337,7 @@ export default function Home() {
                                 playingIndex === index ? stopAudio() : playAudio(message.content, index)
                               }
                               disabled={playingIndex !== null && playingIndex !== index}
-                              className="text-xs px-2 py-1 rounded bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              className="text-xs px-2 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
                               title={playingIndex === index ? 'Stop' : 'Play audio'}
                             >
                               {playingIndex === index ? '⏸️ Stop' : '🔊 Play'}
@@ -368,13 +351,15 @@ export default function Home() {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-200 dark:bg-gray-700 rounded-lg p-4">
+                  <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 shadow-md">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">🤖</span>
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center">
+                        <span className="text-lg filter brightness-0 invert">🤖</span>
+                      </div>
                       <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce delay-200"></div>
+                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce delay-100"></div>
+                        <div className="w-2 h-2 bg-teal-600 rounded-full animate-bounce delay-200"></div>
                       </div>
                     </div>
                   </div>
@@ -386,36 +371,58 @@ export default function Home() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded-lg mb-4">
-            <strong className="font-bold">Error: </strong>
-            <span>{error}</span>
+          <div className="bg-red-50 border-2 border-red-300 text-red-700 px-6 py-4 rounded-2xl mb-4 shadow-lg backdrop-blur-lg">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">⚠️</span>
+              <div>
+                <strong className="font-bold">Error</strong>
+                <p className="text-sm">{error}</p>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Input Area */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-          <div className="flex gap-2">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
+          <div className="flex gap-3">
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message here... (Press Enter to send)"
               disabled={isLoading}
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white disabled:opacity-50"
+              className="flex-1 px-5 py-4 border-2 border-gray-200 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:opacity-50 disabled:bg-gray-50"
               rows={3}
             />
-            <button
-              onClick={sendMessage}
-              disabled={isLoading || !inputMessage.trim()}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
-            >
-              {isLoading ? '⏳' : '📤'}
-              <span className="ml-2">{isLoading ? 'Sending...' : 'Send'}</span>
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={sendMessage}
+                disabled={isLoading || !inputMessage.trim()}
+                className="px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 h-[56px]"
+              >
+                <span className="text-xl">{isLoading ? '⏳' : '📤'}</span>
+                <span>{isLoading ? 'Sending...' : 'Send'}</span>
+              </button>
+              {messages.length > 0 && (
+                <button
+                  onClick={clearChat}
+                  className="px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 h-[56px]"
+                  title="Clear all messages"
+                >
+                  <span className="text-xl">🗑️</span>
+                  <span>Clear</span>
+                </button>
+              )}
+            </div>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            💡 Tip: Press Enter to send, Shift+Enter for new line
-          </p>
+          <div className="flex items-center justify-between mt-3">
+            <p className="text-xs text-gray-500">
+              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new line
+            </p>
+            <p className="text-xs text-gray-400">
+              Powered by Cerebras LLaMA 3.3
+            </p>
+          </div>
         </div>
       </div>
     </div>
