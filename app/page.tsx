@@ -209,21 +209,16 @@ export default function Home() {
               )}
             </div>
             <div className="flex gap-2">
-              {userId ? (
-                <Link
-                  href="/profile"
-                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                >
-                  👤 Profile
-                </Link>
-              ) : (
-                <Link
-                  href="/onboarding"
-                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-                >
-                  ✨ Create Profile
-                </Link>
-              )}
+              <Link
+                href="/onboarding"
+                className={`px-4 py-2 rounded-md transition-colors ${
+                  userId
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600'
+                    : 'bg-green-500 text-white hover:bg-green-600'
+                }`}
+              >
+                {userId ? '✏️ Edit Preferences' : '✨ Create Profile'}
+              </Link>
               <Link
                 href="/voice"
                 className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface UserPreferences {
@@ -110,6 +110,38 @@ export default function OnboardingPage() {
 
   const totalSteps = 7;
 
+  // Load existing preferences from localStorage on mount
+  useEffect(() => {
+    const storedProfile = localStorage.getItem('userProfile');
+    if (storedProfile) {
+      try {
+        const profile = JSON.parse(storedProfile);
+        if (profile.name) setName(profile.name);
+        if (profile.email) setEmail(profile.email);
+        if (profile.preferences) {
+          setPreferences({
+            targetLanguage: profile.preferences.targetLanguage || '',
+            nativeLanguage: profile.preferences.nativeLanguage || 'English',
+            proficiencyLevel: profile.preferences.proficiencyLevel || 'beginner',
+            learningStyle: profile.preferences.learningStyle || [],
+            dailyGoalMinutes: profile.preferences.dailyGoalMinutes || 15,
+            availableDays: profile.preferences.availableDays || [],
+            preferredTimeOfDay: profile.preferences.preferredTimeOfDay || [],
+            learningGoals: profile.preferences.learningGoals || [],
+            motivation: profile.preferences.motivation || '',
+            focusAreas: profile.preferences.focusAreas || [],
+            topicsOfInterest: profile.preferences.topicsOfInterest || [],
+            preferredVoiceSpeed: profile.preferences.preferredVoiceSpeed || 'normal',
+            correctionStyle: profile.preferences.correctionStyle || 'gentle',
+          });
+        }
+        console.log('✅ Loaded existing preferences for editing');
+      } catch (e) {
+        console.error('Error loading existing preferences:', e);
+      }
+    }
+  }, []);
+
   const toggleArrayValue = (key: keyof UserPreferences, value: string) => {
     const current = preferences[key] as string[];
     setPreferences({
@@ -139,22 +171,41 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/users/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, preferences }),
-      });
+      const existingUserId = localStorage.getItem('userId');
 
-      if (!response.ok) throw new Error('Failed to create profile');
+      // If user already exists, update their profile
+      if (existingUserId) {
+        const response = await fetch('http://localhost:3000/api/users/preferences', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: existingUserId, preferences }),
+        });
 
-      const data = await response.json();
-      localStorage.setItem('userId', data.user.id);
-      localStorage.setItem('userProfile', JSON.stringify(data.user));
+        if (!response.ok) throw new Error('Failed to update preferences');
+
+        const data = await response.json();
+        localStorage.setItem('userProfile', JSON.stringify(data.user));
+        console.log('✅ Updated user preferences');
+      } else {
+        // Create new profile for first-time users
+        const response = await fetch('http://localhost:3000/api/users/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, preferences }),
+        });
+
+        if (!response.ok) throw new Error('Failed to create profile');
+
+        const data = await response.json();
+        localStorage.setItem('userId', data.user.id);
+        localStorage.setItem('userProfile', JSON.stringify(data.user));
+        console.log('✅ Created new user profile');
+      }
 
       router.push('/');
     } catch (error) {
-      console.error('Error creating profile:', error);
-      alert('Failed to create profile. Please try again.');
+      console.error('Error saving profile:', error);
+      alert('Failed to save profile. Please try again.');
     }
   };
 
@@ -198,10 +249,12 @@ export default function OnboardingPage() {
           {step === 1 && (
             <div>
               <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                Welcome! 👋
+                {localStorage.getItem('userId') ? 'Edit Your Profile ✏️' : 'Welcome! 👋'}
               </h2>
               <p className="text-gray-600 text-lg mb-8">
-                Let's personalize your language learning experience
+                {localStorage.getItem('userId')
+                  ? 'Update your language learning preferences'
+                  : "Let's personalize your language learning experience"}
               </p>
               <div className="space-y-5">
                 <div>
@@ -594,7 +647,7 @@ export default function OnboardingPage() {
                 onClick={handleSubmit}
                 className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
-                🎉 Start Learning!
+                {localStorage.getItem('userId') ? '✅ Save Changes' : '🎉 Start Learning!'}
               </button>
             )}
           </div>
