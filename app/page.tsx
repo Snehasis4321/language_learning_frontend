@@ -1,38 +1,40 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface Message {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 }
 
 export default function Home() {
-  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
-  const [difficulty, setDifficulty] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
-  const [topic, setTopic] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
+  const difficulty = "beginner";
+  const topic = "";
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [backendUrl, setBackendUrl] = useState('http://localhost:3000');
-  const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; content: string }>>([]);
+  const [error, setError] = useState("");
+  const backendUrl = "http://localhost:3000";
+  const [conversationHistory, setConversationHistory] = useState<
+    Array<{ role: string; content: string }>
+  >([]);
   const [compactedCount, setCompactedCount] = useState(0);
   const [totalTokens, setTotalTokens] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
+    null
+  );
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userPreferences, setUserPreferences] = useState<any>(null);
 
   useEffect(() => {
-    const storedUserId = localStorage.getItem('userId');
-    const storedProfile = localStorage.getItem('userProfile');
+    const storedUserId = localStorage.getItem("userId");
+    const storedProfile = localStorage.getItem("userProfile");
 
     if (storedUserId) {
       setUserId(storedUserId);
@@ -44,7 +46,7 @@ export default function Home() {
         setUserName(profile.name);
         setUserPreferences(profile.preferences);
       } catch (e) {
-        console.error('Error parsing user profile:', e);
+        console.error("Error parsing user profile:", e);
       }
     }
   }, []);
@@ -53,32 +55,35 @@ export default function Home() {
     if (!inputMessage.trim()) return;
 
     const userMessage: Message = {
-      role: 'user',
+      role: "user",
       content: inputMessage,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInputMessage('');
+    setInputMessage("");
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch(`${backendUrl}/api/conversation/test-cerebras`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: inputMessage,
-          difficulty,
-          topic: topic || undefined,
-          history: conversationHistory,
-          userId: userId || undefined, // For tracking auth users
-          userPreferences: userPreferences || undefined, // Always send preferences (for personalization)
-          userName: userName || undefined, // User's name for personalized prompt
-        }),
-      });
+      const response = await fetch(
+        `${backendUrl}/api/conversation/test-cerebras`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: inputMessage,
+            difficulty,
+            topic: topic || undefined,
+            history: conversationHistory,
+            userId: userId || undefined,
+            userPreferences: userPreferences || undefined,
+            userName: userName || undefined,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -87,7 +92,7 @@ export default function Home() {
       const data = await response.json();
 
       const assistantMessage: Message = {
-        role: 'assistant',
+        role: "assistant",
         content: data.aiResponse,
         timestamp: new Date(),
       };
@@ -100,25 +105,25 @@ export default function Home() {
       // Track if conversation was compacted
       if (data.compacted) {
         setCompactedCount((prev) => prev + 1);
-        console.log('✨ Conversation compacted to save costs!');
+        console.log("✨ Conversation compacted to save costs!");
       }
 
       // Track token usage and costs
       if (data.tokenUsage) {
         setTotalTokens((prev) => prev + data.tokenUsage.totalTokens);
         setTotalCost((prev) => prev + data.tokenUsage.estimatedCost);
-        console.log('💰 Token Usage:', data.tokenUsage);
+        console.log("💰 Token Usage:", data.tokenUsage);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send message');
-      console.error('Error sending message:', err);
+      setError(err instanceof Error ? err.message : "Failed to send message");
+      console.error("Error sending message:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -129,16 +134,16 @@ export default function Home() {
       // Stop any currently playing audio
       if (audioElement) {
         audioElement.pause();
-        audioElement.src = '';
+        audioElement.src = "";
       }
 
       setPlayingIndex(index);
 
       // Call backend to generate TTS
       const response = await fetch(`${backendUrl}/api/conversation/tts`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ text }),
       });
@@ -162,14 +167,14 @@ export default function Home() {
 
       audio.onerror = () => {
         setPlayingIndex(null);
-        setError('Failed to play audio');
+        setError("Failed to play audio");
         URL.revokeObjectURL(audioUrl);
       };
 
       await audio.play();
     } catch (err) {
-      console.error('Error playing audio:', err);
-      setError(err instanceof Error ? err.message : 'Failed to play audio');
+      console.error("Error playing audio:", err);
+      setError(err instanceof Error ? err.message : "Failed to play audio");
       setPlayingIndex(null);
     }
   };
@@ -177,7 +182,7 @@ export default function Home() {
   const stopAudio = () => {
     if (audioElement) {
       audioElement.pause();
-      audioElement.src = '';
+      audioElement.src = "";
       setAudioElement(null);
     }
     setPlayingIndex(null);
@@ -189,7 +194,7 @@ export default function Home() {
     setCompactedCount(0);
     setTotalTokens(0);
     setTotalCost(0);
-    setError('');
+    setError("");
     stopAudio();
   };
 
@@ -207,7 +212,13 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
-                <Image src="/logo.png" alt="AI Language Teacher" width={56} height={56} className="object-cover" />
+                <Image
+                  src="/logo.png"
+                  alt="AI Language Teacher"
+                  width={56}
+                  height={56}
+                  className="object-cover"
+                />
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
@@ -215,7 +226,8 @@ export default function Home() {
                 </h1>
                 {userName && (
                   <p className="text-sm text-gray-600 mt-1">
-                    Welcome back, <strong className="text-blue-700">{userName}</strong>!
+                    Welcome back,{" "}
+                    <strong className="text-blue-700">{userName}</strong>!
                   </p>
                 )}
               </div>
@@ -225,11 +237,11 @@ export default function Home() {
                 href="/onboarding"
                 className={`px-5 py-2.5 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 ${
                   userId
-                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700'
+                    ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    : "bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700"
                 }`}
               >
-                <span>{userId ? 'Edit Preferences' : 'Create Profile'}</span>
+                <span>{userId ? "Edit Preferences" : "Create Profile"}</span>
               </Link>
               <Link
                 href="/voice"
@@ -245,25 +257,35 @@ export default function Home() {
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
                   <span>💬</span>
-                  <span className="text-gray-700"><strong>{messages.length}</strong> messages</span>
+                  <span className="text-gray-700">
+                    <strong>{messages.length}</strong> messages
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-50 rounded-lg">
                   <span>📝</span>
-                  <span className="text-gray-700"><strong>{conversationHistory.length}</strong> in history</span>
+                  <span className="text-gray-700">
+                    <strong>{conversationHistory.length}</strong> in history
+                  </span>
                 </div>
                 {compactedCount > 0 && (
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
                     <span>✨</span>
-                    <span className="text-green-700"><strong>Compacted {compactedCount}x</strong></span>
+                    <span className="text-green-700">
+                      <strong>Compacted {compactedCount}x</strong>
+                    </span>
                   </div>
                 )}
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
                   <span>🔢</span>
-                  <span className="text-gray-700"><strong>{totalTokens.toLocaleString()}</strong> tokens</span>
+                  <span className="text-gray-700">
+                    <strong>{totalTokens.toLocaleString()}</strong> tokens
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
                   <span>💰</span>
-                  <span className="text-green-700"><strong>${totalCost.toFixed(6)}</strong></span>
+                  <span className="text-green-700">
+                    <strong>${totalCost.toFixed(6)}</strong>
+                  </span>
                 </div>
               </div>
             </div>
@@ -279,7 +301,11 @@ export default function Home() {
               </div>
               <div className="flex-1">
                 <p className="text-sm text-gray-800">
-                  <strong className="text-blue-700">Personalized Learning Active!</strong> Your AI teacher is adapting to your learning style, goals, and preferences.
+                  <strong className="text-blue-700">
+                    Personalized Learning Active!
+                  </strong>{" "}
+                  Your AI teacher is adapting to your learning style, goals, and
+                  preferences.
                 </p>
               </div>
             </div>
@@ -294,8 +320,12 @@ export default function Home() {
                 <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-4xl">💬</span>
                 </div>
-                <p className="text-xl font-semibold text-gray-700 mb-2">Start your conversation!</p>
-                <p className="text-sm text-gray-500">Type a message below to begin learning</p>
+                <p className="text-xl font-semibold text-gray-700 mb-2">
+                  Start your conversation!
+                </p>
+                <p className="text-sm text-gray-500">
+                  Type a message below to begin learning
+                </p>
               </div>
             </div>
           ) : (
@@ -303,34 +333,44 @@ export default function Home() {
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${
+                    message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl p-4 shadow-md ${
-                      message.role === 'user'
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
-                        : 'bg-white border-2 border-gray-200 text-gray-800'
+                      message.role === "user"
+                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white"
+                        : "bg-white border-2 border-gray-200 text-gray-800"
                     }`}
                   >
-                    <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <p className="whitespace-pre-wrap leading-relaxed">
+                      {message.content}
+                    </p>
                     <div className="flex items-center gap-2 mt-3">
                       <p
                         className={`text-xs ${
-                          message.role === 'user' ? 'text-white/70' : 'text-gray-500'
+                          message.role === "user"
+                            ? "text-white/70"
+                            : "text-gray-500"
                         }`}
                       >
                         {message.timestamp.toLocaleTimeString()}
                       </p>
-                      {message.role === 'assistant' && (
+                      {message.role === "assistant" && (
                         <button
                           onClick={() =>
-                            playingIndex === index ? stopAudio() : playAudio(message.content, index)
+                            playingIndex === index
+                              ? stopAudio()
+                              : playAudio(message.content, index)
                           }
-                          disabled={playingIndex !== null && playingIndex !== index}
+                          disabled={
+                            playingIndex !== null && playingIndex !== index
+                          }
                           className="text-xs px-2 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
-                          title={playingIndex === index ? 'Stop' : 'Play audio'}
+                          title={playingIndex === index ? "Stop" : "Play audio"}
                         >
-                          {playingIndex === index ? '⏸️ Stop' : '🔊 Play'}
+                          {playingIndex === index ? "⏸️ Stop" : "🔊 Play"}
                         </button>
                       )}
                     </div>
@@ -371,7 +411,7 @@ export default function Home() {
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               placeholder="Type your message here... (Press Enter to send)"
               disabled={isLoading}
               className="flex-1 px-5 py-4 border-2 border-gray-200 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:opacity-50 disabled:bg-gray-50"
@@ -383,8 +423,8 @@ export default function Home() {
                 disabled={isLoading || !inputMessage.trim()}
                 className="px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 h-[56px]"
               >
-                <span className="text-xl">{isLoading ? '⏳' : '📤'}</span>
-                <span>{isLoading ? 'Sending...' : 'Send'}</span>
+                <span className="text-xl">{isLoading ? "⏳" : "📤"}</span>
+                <span>{isLoading ? "Sending..." : "Send"}</span>
               </button>
               {messages.length > 0 && (
                 <button
@@ -400,7 +440,8 @@ export default function Home() {
           </div>
           <div className="flex items-center justify-between mt-3">
             <p className="text-xs text-gray-500">
-              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new line
+              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new
+              line
             </p>
             <p className="text-xs text-gray-400">
               Powered by Cerebras LLaMA 3.3
