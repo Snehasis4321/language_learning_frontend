@@ -40,7 +40,7 @@ export default function VoiceChatPage() {
         </div>
 
         {/* Voice Chat Component */}
-        <VoiceChat backendUrl="http://localhost:3000" />
+        <VoiceChat backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000"} />
       </div>
     </div>
   );

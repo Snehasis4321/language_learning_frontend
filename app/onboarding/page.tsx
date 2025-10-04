@@ -172,10 +172,11 @@ export default function OnboardingPage() {
   const handleSubmit = async () => {
     try {
       const existingUserId = localStorage.getItem('userId');
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
 
       // If user already exists, update their profile
       if (existingUserId) {
-        const response = await fetch('http://localhost:3000/api/users/preferences', {
+        const response = await fetch(`${backendUrl}/api/users/preferences`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: existingUserId, preferences }),
@@ -184,11 +185,23 @@ export default function OnboardingPage() {
         if (!response.ok) throw new Error('Failed to update preferences');
 
         const data = await response.json();
-        localStorage.setItem('userProfile', JSON.stringify(data.user));
-        console.log('✅ Updated user preferences');
+
+        if (data.isGuest) {
+          // Guest user - backend didn't save to DB, just save to localStorage
+          localStorage.setItem('userProfile', JSON.stringify({
+            name,
+            email,
+            preferences,
+          }));
+          console.log('👤 Guest user - preferences saved to localStorage only');
+        } else {
+          // Authenticated user - backend saved to DB
+          localStorage.setItem('userProfile', JSON.stringify(data.user));
+          console.log('✅ Updated user preferences in database');
+        }
       } else {
         // Create new profile for first-time users
-        const response = await fetch('http://localhost:3000/api/users/profile', {
+        const response = await fetch(`${backendUrl}/api/users/profile`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, preferences }),

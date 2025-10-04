@@ -17,7 +17,7 @@ export default function Home() {
   const topic = "";
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const backendUrl = "http://localhost:3000";
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
   const [conversationHistory, setConversationHistory] = useState<
     Array<{ role: string; content: string }>
   >([]);

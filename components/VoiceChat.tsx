@@ -175,7 +175,7 @@ function VoiceAssistantUI() {
   );
 }
 
-export default function VoiceChat({ backendUrl = 'http://localhost:3000' }: VoiceChatProps) {
+export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000' }: VoiceChatProps) {
   // Get userId from localStorage if available
   const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 

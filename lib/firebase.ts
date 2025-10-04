@@ -14,8 +14,6 @@ const firebaseConfig: FirebaseOptions | undefined = process.env
   ? JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_SERVICE_JSON)
   : undefined;
 
-console.log(firebaseConfig);
-
 if (!firebaseConfig) {
   console.error("Firebase configuration is missing.");
   throw new Error("Firebase configuration is missing.");

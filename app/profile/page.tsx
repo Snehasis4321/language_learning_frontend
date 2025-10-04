@@ -53,9 +53,10 @@ export default function ProfilePage() {
       }
 
       try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
         const [profileRes, progressRes] = await Promise.all([
-          fetch(`http://localhost:3000/api/users/profile/${userId}`),
-          fetch(`http://localhost:3000/api/users/progress/${userId}`),
+          fetch(`${backendUrl}/api/users/profile/${userId}`),
+          fetch(`${backendUrl}/api/users/progress/${userId}`),
         ]);
 
         if (profileRes.ok) {
