@@ -144,10 +144,13 @@ function VoiceAssistantUI() {
 }
 
 export default function VoiceChat({ backendUrl = 'http://localhost:3000' }: VoiceChatProps) {
+  // Get userId from localStorage if available
+  const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+
   const [sessionConfig, setSessionConfig] = useState({
     difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
     topic: '',
-    userId: `user_${Date.now()}`,
+    userId: storedUserId || `user_${Date.now()}`,
   });
   const [isConfigured, setIsConfigured] = useState(false);
   const [connectionInfo, setConnectionInfo] = useState<{
@@ -230,6 +233,14 @@ export default function VoiceChat({ backendUrl = 'http://localhost:3000' }: Voic
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
             🎤 Start Voice Conversation
           </h2>
+
+          {storedUserId && (
+            <div className="mb-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                ✨ <strong>Personalized Learning Active!</strong> Your AI teacher will adapt to your preferences and goals.
+              </p>
+            </div>
+          )}
 
           <div className="space-y-4">
             <div>

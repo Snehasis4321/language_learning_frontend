@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -10,6 +11,7 @@ interface Message {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [difficulty, setDifficulty] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
@@ -23,6 +25,26 @@ export default function Home() {
   const [totalCost, setTotalCost] = useState(0);
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    const storedProfile = localStorage.getItem('userProfile');
+
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+
+    if (storedProfile) {
+      try {
+        const profile = JSON.parse(storedProfile);
+        setUserName(profile.name);
+      } catch (e) {
+        console.error('Error parsing user profile:', e);
+      }
+    }
+  }, []);
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -49,6 +71,7 @@ export default function Home() {
           difficulty,
           topic: topic || undefined,
           history: conversationHistory,
+          userId: userId || undefined, // Send userId if available for personalized responses
         }),
       });
 
@@ -171,15 +194,39 @@ export default function Home() {
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-4">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
-              🎓 AI Language Teacher - Text Chat
-            </h1>
-            <Link
-              href="/voice"
-              className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
-            >
-              🎤 Try Voice Chat
-            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+                🎓 AI Language Teacher - Text Chat
+              </h1>
+              {userName && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Welcome back, {userName}! 👋
+                </p>
+              )}
+            </div>
+            <div className="flex gap-2">
+              {userId ? (
+                <Link
+                  href="/profile"
+                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                >
+                  👤 Profile
+                </Link>
+              ) : (
+                <Link
+                  href="/onboarding"
+                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+                >
+                  ✨ Create Profile
+                </Link>
+              )}
+              <Link
+                href="/voice"
+                className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+              >
+                🎤 Try Voice Chat
+              </Link>
+            </div>
           </div>
           <p className="text-gray-600 dark:text-gray-300">
             Test your Cerebras + LLaMA integration
@@ -206,6 +253,15 @@ export default function Home() {
             </div>
           )}
         </div>
+
+        {/* Personalization Notice */}
+        {userId && (
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4">
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              ✨ <strong>Personalized Learning Active!</strong> Your AI teacher is adapting to your learning style, goals, and preferences.
+            </p>
+          </div>
+        )}
 
         {/* Settings Panel */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-4">
