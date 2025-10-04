@@ -27,6 +27,7 @@ export default function Home() {
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userPreferences, setUserPreferences] = useState<any>(null);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
@@ -40,6 +41,7 @@ export default function Home() {
       try {
         const profile = JSON.parse(storedProfile);
         setUserName(profile.name);
+        setUserPreferences(profile.preferences);
       } catch (e) {
         console.error('Error parsing user profile:', e);
       }
@@ -71,7 +73,9 @@ export default function Home() {
           difficulty,
           topic: topic || undefined,
           history: conversationHistory,
-          userId: userId || undefined, // Send userId if available for personalized responses
+          userId: userId || undefined, // For tracking auth users
+          userPreferences: userPreferences || undefined, // Always send preferences (for personalization)
+          userName: userName || undefined, // User's name for personalized prompt
         }),
       });
 

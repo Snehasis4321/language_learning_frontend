@@ -171,35 +171,41 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-3xl mx-auto pt-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 p-4 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-4xl mx-auto pt-8 relative z-10">
         {/* Progress bar */}
         <div className="mb-8">
-          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <div className="flex justify-between text-sm text-white/90 font-medium mb-3">
             <span>Step {step} of {totalSteps}</span>
-            <span>{Math.round((step / totalSteps) * 100)}%</span>
+            <span>{Math.round((step / totalSteps) * 100)}% Complete</span>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div className="w-full bg-white/20 backdrop-blur-sm rounded-full h-3 shadow-inner">
             <div
-              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500 shadow-lg"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Step content */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12">
           {step === 1 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Welcome! 👋
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Let's personalize your language learning experience
               </p>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     What's your name?
                   </label>
                   <input
@@ -207,11 +213,11 @@ export default function OnboardingPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Email (optional)
                   </label>
                   <input
@@ -219,7 +225,7 @@ export default function OnboardingPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
                   />
                 </div>
               </div>
@@ -228,21 +234,21 @@ export default function OnboardingPage() {
 
           {step === 2 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Which language do you want to learn? 🌍
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Choose your target language and current level
               </p>
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Target Language
                   </label>
                   <select
                     value={preferences.targetLanguage}
                     onChange={(e) => setPreferences({ ...preferences, targetLanguage: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900"
                   >
                     <option value="">Select a language</option>
                     {LANGUAGES.map((lang) => (
@@ -251,13 +257,13 @@ export default function OnboardingPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Your Native Language
                   </label>
                   <select
                     value={preferences.nativeLanguage}
                     onChange={(e) => setPreferences({ ...preferences, nativeLanguage: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900"
                   >
                     {LANGUAGES.map((lang) => (
                       <option key={lang} value={lang}>{lang}</option>
@@ -265,22 +271,22 @@ export default function OnboardingPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Current Proficiency Level
                   </label>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {PROFICIENCY_LEVELS.map((level) => (
                       <button
                         key={level.value}
                         onClick={() => setPreferences({ ...preferences, proficiencyLevel: level.value })}
-                        className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all ${
+                        className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 ${
                           preferences.proficiencyLevel === level.value
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                            : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                         }`}
                       >
-                        <div className="font-medium text-gray-800 dark:text-white">{level.label}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{level.desc}</div>
+                        <div className="font-semibold text-gray-800">{level.label}</div>
+                        <div className="text-sm text-gray-500">{level.desc}</div>
                       </button>
                     ))}
                   </div>
@@ -291,28 +297,28 @@ export default function OnboardingPage() {
 
           {step === 3 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 How do you learn best? 🎯
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Select all that apply (we'll adapt our teaching style)
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {LEARNING_STYLES.map((style) => (
                   <button
                     key={style.value}
                     onClick={() => toggleArrayValue('learningStyle', style.value)}
-                    className={`text-left px-4 py-4 rounded-lg border-2 transition-all ${
+                    className={`text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 ${
                       preferences.learningStyle.includes(style.value)
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                        ? 'border-blue-500 bg-blue-50 shadow-md'
+                        : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{style.emoji}</span>
+                      <span className="text-3xl">{style.emoji}</span>
                       <div>
-                        <div className="font-medium text-gray-800 dark:text-white">{style.label}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{style.desc}</div>
+                        <div className="font-semibold text-gray-800">{style.label}</div>
+                        <div className="text-sm text-gray-500">{style.desc}</div>
                       </div>
                     </div>
                   </button>
@@ -323,30 +329,30 @@ export default function OnboardingPage() {
 
           {step === 4 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Why are you learning? 🎓
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Select your main goals
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                 {LEARNING_GOALS.map((goal) => (
                   <button
                     key={goal.value}
                     onClick={() => toggleArrayValue('learningGoals', goal.value)}
-                    className={`px-4 py-4 rounded-lg border-2 transition-all ${
+                    className={`px-5 py-5 rounded-xl border-2 transition-all duration-200 ${
                       preferences.learningGoals.includes(goal.value)
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                        ? 'border-blue-500 bg-blue-50 shadow-md'
+                        : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                     }`}
                   >
-                    <div className="text-3xl mb-2">{goal.emoji}</div>
-                    <div className="text-sm font-medium text-gray-800 dark:text-white">{goal.label}</div>
+                    <div className="text-4xl mb-2">{goal.emoji}</div>
+                    <div className="text-sm font-semibold text-gray-800">{goal.label}</div>
                   </button>
                 ))}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Tell us more about your motivation (optional)
                 </label>
                 <textarea
@@ -354,7 +360,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setPreferences({ ...preferences, motivation: e.target.value })}
                   placeholder="Why do you want to learn this language?"
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
                 />
               </div>
             </div>
@@ -362,30 +368,30 @@ export default function OnboardingPage() {
 
           {step === 5 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 What do you want to focus on? 📚
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Choose your priority areas
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {FOCUS_AREAS.map((area) => (
                   <button
                     key={area.value}
                     onClick={() => toggleArrayValue('focusAreas', area.value)}
-                    className={`px-4 py-4 rounded-lg border-2 transition-all ${
+                    className={`px-4 py-5 rounded-xl border-2 transition-all duration-200 ${
                       preferences.focusAreas.includes(area.value)
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                        ? 'border-blue-500 bg-blue-50 shadow-md'
+                        : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                     }`}
                   >
-                    <div className="text-2xl mb-2">{area.emoji}</div>
-                    <div className="text-sm font-medium text-gray-800 dark:text-white">{area.label}</div>
+                    <div className="text-3xl mb-2">{area.emoji}</div>
+                    <div className="text-sm font-semibold text-gray-800">{area.label}</div>
                   </button>
                 ))}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Topics you'd like to practice
                 </label>
                 <div className="flex gap-2 mb-3">
@@ -395,11 +401,11 @@ export default function OnboardingPage() {
                     onChange={(e) => setCustomTopic(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addCustomTopic()}
                     placeholder="e.g., Travel, Food, Business..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
                   />
                   <button
                     onClick={addCustomTopic}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    className="px-5 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 font-semibold"
                   >
                     Add
                   </button>
@@ -408,10 +414,10 @@ export default function OnboardingPage() {
                   {preferences.topicsOfInterest.map((topic) => (
                     <span
                       key={topic}
-                      className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm flex items-center gap-2"
+                      className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center gap-2 font-medium"
                     >
                       {topic}
-                      <button onClick={() => removeTopic(topic)} className="hover:text-red-600">×</button>
+                      <button onClick={() => removeTopic(topic)} className="hover:text-red-600 text-lg">×</button>
                     </span>
                   ))}
                 </div>
@@ -421,18 +427,18 @@ export default function OnboardingPage() {
 
           {step === 6 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 When can you practice? ⏰
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Set your learning schedule
               </p>
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 mb-4">
                     Daily learning goal
                   </label>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-6">
                     <input
                       type="range"
                       min="5"
@@ -440,15 +446,15 @@ export default function OnboardingPage() {
                       step="5"
                       value={preferences.dailyGoalMinutes}
                       onChange={(e) => setPreferences({ ...preferences, dailyGoalMinutes: parseInt(e.target.value) })}
-                      className="flex-1"
+                      className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                     />
-                    <span className="text-2xl font-bold text-blue-600 dark:text-blue-400 min-w-[100px]">
+                    <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent min-w-[120px]">
                       {preferences.dailyGoalMinutes} min
                     </span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Available days
                   </label>
                   <div className="grid grid-cols-7 gap-2">
@@ -456,10 +462,10 @@ export default function OnboardingPage() {
                       <button
                         key={day.value}
                         onClick={() => toggleArrayValue('availableDays', day.value)}
-                        className={`px-3 py-2 rounded-lg border-2 transition-all text-sm font-medium ${
+                        className={`px-3 py-3 rounded-xl border-2 transition-all duration-200 text-sm font-semibold ${
                           preferences.availableDays.includes(day.value)
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                            : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-300'
+                            ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-md'
+                            : 'border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-gray-50'
                         }`}
                       >
                         {day.label}
@@ -468,25 +474,25 @@ export default function OnboardingPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Preferred time of day
                   </label>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {TIME_OF_DAY.map((time) => (
                       <button
                         key={time.value}
                         onClick={() => toggleArrayValue('preferredTimeOfDay', time.value)}
-                        className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all ${
+                        className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 ${
                           preferences.preferredTimeOfDay.includes(time.value)
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                            : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-2xl">{time.emoji}</span>
+                          <span className="text-3xl">{time.emoji}</span>
                           <div>
-                            <div className="font-medium text-gray-800 dark:text-white">{time.label}</div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">{time.time}</div>
+                            <div className="font-semibold text-gray-800">{time.label}</div>
+                            <div className="text-sm text-gray-500">{time.time}</div>
                           </div>
                         </div>
                       </button>
@@ -499,18 +505,18 @@ export default function OnboardingPage() {
 
           {step === 7 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Final preferences ⚙️
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 text-lg mb-8">
                 Customize your learning experience
               </p>
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Voice speed preference
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-4">
                     {[
                       { value: 'very_slow', label: 'Very Slow', emoji: '🐢' },
                       { value: 'slow', label: 'Slow', emoji: '🚶' },
@@ -520,23 +526,23 @@ export default function OnboardingPage() {
                       <button
                         key={speed.value}
                         onClick={() => setPreferences({ ...preferences, preferredVoiceSpeed: speed.value })}
-                        className={`px-4 py-3 rounded-lg border-2 transition-all ${
+                        className={`px-5 py-4 rounded-xl border-2 transition-all duration-200 ${
                           preferences.preferredVoiceSpeed === speed.value
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                            : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                         }`}
                       >
-                        <div className="text-2xl mb-1">{speed.emoji}</div>
-                        <div className="text-sm font-medium text-gray-800 dark:text-white">{speed.label}</div>
+                        <div className="text-3xl mb-2">{speed.emoji}</div>
+                        <div className="text-sm font-semibold text-gray-800">{speed.label}</div>
                       </button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
                     How should we correct your mistakes?
                   </label>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {[
                       { value: 'immediate', label: 'Immediate', desc: 'Correct me right away' },
                       { value: 'gentle', label: 'Gentle hints', desc: 'Guide me without explicit correction' },
@@ -546,14 +552,14 @@ export default function OnboardingPage() {
                       <button
                         key={style.value}
                         onClick={() => setPreferences({ ...preferences, correctionStyle: style.value })}
-                        className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all ${
+                        className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 ${
                           preferences.correctionStyle === style.value
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                            : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                         }`}
                       >
-                        <div className="font-medium text-gray-800 dark:text-white">{style.label}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{style.desc}</div>
+                        <div className="font-semibold text-gray-800">{style.label}</div>
+                        <div className="text-sm text-gray-500">{style.desc}</div>
                       </button>
                     ))}
                   </div>
@@ -563,11 +569,11 @@ export default function OnboardingPage() {
           )}
 
           {/* Navigation buttons */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between mt-10 pt-8 border-t border-gray-200">
             {step > 1 ? (
               <button
                 onClick={() => setStep(step - 1)}
-                className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-semibold"
               >
                 ← Back
               </button>
@@ -579,14 +585,14 @@ export default function OnboardingPage() {
               <button
                 onClick={() => setStep(step + 1)}
                 disabled={!canProceed()}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Next →
               </button>
             ) : (
               <button
                 onClick={handleSubmit}
-                className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 🎉 Start Learning!
               </button>
