@@ -5,24 +5,35 @@ import Link from 'next/link';
 
 export default function VoiceChatPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 p-4">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-4">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
-                🎤 AI Language Teacher - Voice Chat
-              </h1>
-              <p className="text-gray-600 dark:text-gray-300">
-                Practice speaking with your AI language teacher in real-time
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-2xl">🎤</span>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                  AI Voice Chat
+                </h1>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Practice speaking with your AI language teacher in real-time
+                </p>
+              </div>
             </div>
             <Link
               href="/"
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
-              ← Back to Text Chat
+              ← Text Chat
             </Link>
           </div>
         </div>
