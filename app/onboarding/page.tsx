@@ -91,6 +91,7 @@ export default function OnboardingPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [customTopic, setCustomTopic] = useState('');
+  const [isExistingUser, setIsExistingUser] = useState(false);
 
   const [preferences, setPreferences] = useState<UserPreferences>({
     targetLanguage: '',
@@ -113,6 +114,8 @@ export default function OnboardingPage() {
   // Load existing preferences from localStorage on mount
   useEffect(() => {
     const storedProfile = localStorage.getItem('userProfile');
+    const storedUserId = localStorage.getItem('userId');
+    setIsExistingUser(!!storedUserId);
     if (storedProfile) {
       try {
         const profile = JSON.parse(storedProfile);
@@ -262,17 +265,17 @@ export default function OnboardingPage() {
           {step === 1 && (
             <div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                {localStorage.getItem('userId') ? 'Edit Your Profile ✏️' : 'Welcome! 👋'}
+                {isExistingUser ? 'Edit Your Profile ✏️' : 'Welcome! 👋'}
               </h2>
               <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
-                {localStorage.getItem('userId')
+                {isExistingUser
                   ? 'Update your language learning preferences'
                   : "Let's personalize your language learning experience"}
               </p>
               <div className="space-y-4 md:space-y-5">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    What's your name?
+                    What&apos;s your name?
                   </label>
                   <input
                     type="text"
@@ -367,7 +370,7 @@ export default function OnboardingPage() {
                 How do you learn best? 🎯
               </h2>
               <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
-                Select all that apply (we'll adapt our teaching style)
+                Select all that apply (we&apos;ll adapt our teaching style)
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {LEARNING_STYLES.map((style) => (
@@ -458,7 +461,7 @@ export default function OnboardingPage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Topics you'd like to practice
+                  Topics you&apos;d like to practice
                 </label>
                 <div className="flex gap-2 mb-3">
                   <input
@@ -660,7 +663,7 @@ export default function OnboardingPage() {
                 onClick={handleSubmit}
                 className="px-6 md:px-8 py-2.5 md:py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
               >
-                {localStorage.getItem('userId') ? '✅ Save Changes' : '🎉 Start Learning!'}
+                {isExistingUser ? '✅ Save Changes' : '🎉 Start Learning!'}
               </button>
             )}
           </div>

@@ -30,7 +30,7 @@ export default function Home() {
   );
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [userPreferences, setUserPreferences] = useState<any>(null);
+  const [userPreferences, setUserPreferences] = useState<Record<string, unknown> | null>(null);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");

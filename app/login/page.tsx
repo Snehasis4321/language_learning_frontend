@@ -35,8 +35,8 @@ export default function LoginPage() {
         await login(email, password);
         router.push("/");
       }
-    } catch (err: any) {
-      setError(err.message || "Authentication failed");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Authentication failed");
     } finally {
       setLoading(false);
     }

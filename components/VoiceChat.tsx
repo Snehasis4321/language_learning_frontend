@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import {
   LiveKitRoom,
   RoomAudioRenderer,
   useVoiceAssistant,
-  BarVisualizer,
   DisconnectButton,
   useConnectionState,
   useRoomInfo,
@@ -21,7 +20,7 @@ interface VoiceChatProps {
 }
 
 function VoiceAssistantUI() {
-  const { state, audioTrack } = useVoiceAssistant();
+  const { state } = useVoiceAssistant();
   const connectionState = useConnectionState();
   const roomInfo = useRoomInfo();
   const allTranscriptions = useTranscriptions();
@@ -30,6 +29,14 @@ function VoiceAssistantUI() {
   // Get local participant's audio track SIDs for comparison
   const localAudioTrackSids = Array.from(localParticipant?.audioTrackPublications?.values() || [])
     .map(pub => pub.trackSid);
+
+  // Ref for auto-scrolling transcripts
+  const transcriptEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new transcripts arrive
+  useEffect(() => {
+    transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [allTranscriptions]);
 
   // Debug: Log transcriptions when they change
   useEffect(() => {
@@ -91,10 +98,10 @@ function VoiceAssistantUI() {
               'bg-gradient-to-br from-gray-400 to-gray-500'
             }`}>
               <div className="text-6xl md:text-8xl">
-                {state === 'listening' && '👂'}
-                {state === 'thinking' && '🤔'}
-                {state === 'speaking' && '🗣️'}
-                {state === 'idle' && '💭'}
+                {state === 'listening' ? '👂' :
+                 state === 'thinking' ? '🤔' :
+                 state === 'speaking' ? '🗣️' :
+                 '💭'}
               </div>
             </div>
           </div>
@@ -105,10 +112,10 @@ function VoiceAssistantUI() {
               {state}
             </h3>
             <p className="text-gray-600 text-base md:text-lg max-w-md">
-              {state === 'listening' && 'I\'m listening to you...'}
-              {state === 'thinking' && 'Let me think about that...'}
-              {state === 'speaking' && 'Here\'s what I think...'}
-              {state === 'idle' && 'Start speaking to begin the conversation'}
+              {state === 'listening' ? 'I\'m listening to you...' :
+               state === 'thinking' ? 'Let me think about that...' :
+               state === 'speaking' ? 'Here\'s what I think...' :
+               'Start speaking to begin the conversation'}
             </p>
           </div>
         </div>
@@ -157,6 +164,8 @@ function VoiceAssistantUI() {
                 </div>
               );
             })}
+            {/* Invisible element at the end for auto-scroll */}
+            <div ref={transcriptEndRef} />
           </div>
         </div>
       )}

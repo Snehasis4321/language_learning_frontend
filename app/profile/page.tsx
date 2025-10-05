@@ -235,7 +235,7 @@ export default function ProfilePage() {
               <div>
                 <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">Motivation</div>
                 <div className="text-sm md:text-base text-gray-800 dark:text-white italic">
-                  "{profile.preferences.motivation}"
+                  &quot;{profile.preferences.motivation}&quot;
                 </div>
               </div>
             )}
