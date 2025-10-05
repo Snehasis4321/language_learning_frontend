@@ -230,6 +230,22 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
     setError('');
 
     try {
+      // Get user preferences from localStorage
+      const userProfileStr = localStorage.getItem('userProfile');
+      let userPreferences = null;
+      let userName = null;
+
+      if (userProfileStr) {
+        try {
+          const userProfile = JSON.parse(userProfileStr);
+          // userProfile structure: { name: 'X', email: 'Y', preferences: {...} }
+          userPreferences = userProfile.preferences || userProfile; // Handle both formats
+          userName = userProfile.name;
+        } catch (e) {
+          console.error('Error parsing user profile:', e);
+        }
+      }
+
       const response = await fetch(`${backendUrl}/api/conversation/start`, {
         method: 'POST',
         headers: {
@@ -240,6 +256,8 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
           difficulty: sessionConfig.difficulty,
           topic: sessionConfig.topic || undefined,
           userId: sessionConfig.userId,
+          userPreferences, // Send preferences object only
+          userName, // Send user name
         }),
       });
 
