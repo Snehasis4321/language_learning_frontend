@@ -34,12 +34,12 @@ function VoiceAssistantUI() {
   }, [allTranscriptions]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 md:space-y-4">
       {/* Connection Status */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-        <div className="flex items-center justify-between">
+      <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
               connectionState === ConnectionState.Connected
                 ? 'bg-gradient-to-r from-green-500 to-green-600'
                 : 'bg-gradient-to-r from-yellow-500 to-yellow-600'
@@ -49,10 +49,10 @@ function VoiceAssistantUI() {
               </span>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="text-base md:text-lg font-bold text-gray-800">
                 Connection Status
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-xs md:text-sm text-gray-600">
                 {connectionState === ConnectionState.Connected ? (
                   <span>Connected to {roomInfo.name}</span>
                 ) : (
@@ -61,17 +61,17 @@ function VoiceAssistantUI() {
               </p>
             </div>
           </div>
-          <DisconnectButton className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+          <DisconnectButton className="px-4 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl md:rounded-2xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base w-full sm:w-auto">
             Disconnect
           </DisconnectButton>
         </div>
       </div>
 
       {/* Voice Assistant Status */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
-        <div className="text-center space-y-6">
-          <div className="inline-block p-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full shadow-2xl">
-            <div className="text-7xl animate-pulse">
+      <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
+        <div className="text-center space-y-4 md:space-y-6">
+          <div className="inline-block p-6 md:p-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full shadow-2xl">
+            <div className="text-5xl md:text-7xl animate-pulse">
               {state === 'listening' && '👂'}
               {state === 'thinking' && '🤔'}
               {state === 'speaking' && '🗣️'}
@@ -80,10 +80,10 @@ function VoiceAssistantUI() {
           </div>
 
           <div>
-            <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent capitalize">
+            <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent capitalize">
               {state}
             </h3>
-            <p className="text-gray-600 mt-2 text-lg">
+            <p className="text-gray-600 mt-2 text-base md:text-lg px-4">
               {state === 'listening' && 'I\'m listening to you...'}
               {state === 'thinking' && 'Let me think about that...'}
               {state === 'speaking' && 'Here\'s what I think...'}
@@ -93,7 +93,7 @@ function VoiceAssistantUI() {
 
           {/* Audio Visualizer */}
           {audioTrack && (
-            <div className="w-full max-w-md mx-auto h-24 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-2xl overflow-hidden border-2 border-blue-200">
+            <div className="w-full max-w-md mx-auto h-20 md:h-24 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl md:rounded-2xl overflow-hidden border-2 border-blue-200">
               <BarVisualizer
                 state={state}
                 barCount={30}
@@ -112,12 +112,12 @@ function VoiceAssistantUI() {
 
       {/* Transcription Display */}
       {allTranscriptions.length > 0 && (
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span className="text-2xl">📝</span>
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6">
+          <h3 className="text-base md:text-lg font-bold text-gray-800 mb-3 md:mb-4 flex items-center gap-2">
+            <span className="text-xl md:text-2xl">📝</span>
             Conversation Transcript
           </h3>
-          <div className="space-y-3 max-h-80 overflow-y-auto">
+          <div className="space-y-2 md:space-y-3 max-h-64 md:max-h-80 overflow-y-auto">
             {allTranscriptions.map((transcription, idx) => {
               const isUser = transcription.participantInfo?.identity === localParticipant?.identity;
               return (
@@ -126,7 +126,7 @@ function VoiceAssistantUI() {
                   className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl p-4 shadow-md ${
+                    className={`max-w-[90%] sm:max-w-[85%] rounded-xl md:rounded-2xl p-3 md:p-4 shadow-md ${
                       isUser
                         ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
                         : 'bg-white border-2 border-gray-200 text-gray-800'
@@ -137,7 +137,7 @@ function VoiceAssistantUI() {
                     }`}>
                       {isUser ? 'You' : 'AI Teacher'}
                     </p>
-                    <p className="text-sm leading-relaxed">{transcription.text}</p>
+                    <p className="text-xs md:text-sm leading-relaxed">{transcription.text}</p>
                   </div>
                 </div>
               );
@@ -147,12 +147,12 @@ function VoiceAssistantUI() {
       )}
 
       {/* Instructions */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-6 border-2 border-blue-200">
-        <h4 className="font-bold text-blue-700 mb-3 flex items-center gap-2 text-lg">
-          <span className="text-2xl">💡</span>
+      <div className="bg-white/95 backdrop-blur-lg rounded-xl md:rounded-2xl shadow-xl p-4 md:p-6 border-2 border-blue-200">
+        <h4 className="font-bold text-blue-700 mb-2 md:mb-3 flex items-center gap-2 text-base md:text-lg">
+          <span className="text-xl md:text-2xl">💡</span>
           How to use
         </h4>
-        <ul className="text-sm text-gray-700 space-y-2">
+        <ul className="text-xs md:text-sm text-gray-700 space-y-1.5 md:space-y-2">
           <li className="flex items-start gap-2">
             <span className="text-blue-600 font-bold">•</span>
             <span>Allow microphone access when prompted</span>
@@ -261,24 +261,24 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
   if (!isConfigured || !connectionInfo) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
           <div className="text-center mb-6">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden">
               <Image src="/logo.png" alt="Voice Chat" width={80} height={80} className="object-cover" />
             </div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Start Voice Conversation
             </h2>
           </div>
 
           {storedUserId && (
-            <div className="mb-6 bg-white border-2 border-blue-200 rounded-2xl p-4 shadow-md">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">✨</span>
+            <div className="mb-6 bg-white border-2 border-blue-200 rounded-xl md:rounded-2xl p-3 md:p-4 shadow-md">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg md:text-xl">✨</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-gray-800">
+                  <p className="text-xs md:text-sm text-gray-800">
                     <strong className="text-blue-700">Personalized Learning Active!</strong> Your AI teacher will adapt to your preferences and goals.
                   </p>
                 </div>
@@ -286,7 +286,7 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
             </div>
           )}
 
-          <div className="space-y-5">
+          <div className="space-y-4 md:space-y-5">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Difficulty Level
@@ -299,7 +299,7 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
                     difficulty: e.target.value as typeof prev.difficulty,
                   }))
                 }
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900"
+                className="w-full px-3 md:px-4 py-2.5 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 text-sm md:text-base"
               >
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
@@ -318,17 +318,17 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
                   setSessionConfig((prev) => ({ ...prev, topic: e.target.value }))
                 }
                 placeholder="e.g., Travel, Food, Business"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
+                className="w-full px-3 md:px-4 py-2.5 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 text-sm md:text-base"
               />
             </div>
 
             {error && (
-              <div className="bg-red-50 border-2 border-red-300 text-red-700 px-6 py-4 rounded-2xl shadow-lg">
+              <div className="bg-red-50 border-2 border-red-300 text-red-700 px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-lg">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">⚠️</span>
+                  <span className="text-lg md:text-xl">⚠️</span>
                   <div>
-                    <strong className="font-bold">Error</strong>
-                    <p className="text-sm">{error}</p>
+                    <strong className="font-bold text-sm md:text-base">Error</strong>
+                    <p className="text-xs md:text-sm">{error}</p>
                   </div>
                 </div>
               </div>
@@ -337,7 +337,7 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
             <button
               onClick={startSession}
               disabled={isLoading}
-              className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="w-full px-6 py-3.5 md:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl md:rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
             >
               {isLoading ? '⏳ Starting...' : '🎤 Start Voice Chat'}
             </button>

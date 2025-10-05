@@ -208,10 +208,10 @@ export default function Home() {
 
       <div className="relative max-w-5xl mx-auto">
         {/* Header */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6 mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
                 <Image
                   src="/logo.png"
                   alt="AI Language Teacher"
@@ -221,21 +221,21 @@ export default function Home() {
                 />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                   AI Language Teacher
                 </h1>
                 {userName && (
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
                     Welcome back,{" "}
                     <strong className="text-blue-700">{userName}</strong>!
                   </p>
                 )}
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
               <Link
                 href="/onboarding"
-                className={`px-5 py-2.5 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base ${
                   userId
                     ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     : "bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700"
@@ -245,7 +245,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/voice"
-                className="px-5 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2"
+                className="px-4 md:px-5 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base"
               >
                 <span>Voice Chat</span>
               </Link>
@@ -254,34 +254,34 @@ export default function Home() {
 
           {messages.length > 0 && (
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex flex-wrap gap-4 text-sm">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
+              <div className="flex flex-wrap gap-2 md:gap-4 text-xs md:text-sm">
+                <div className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1.5 bg-blue-50 rounded-lg">
                   <span>💬</span>
                   <span className="text-gray-700">
                     <strong>{messages.length}</strong> messages
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-50 rounded-lg">
+                <div className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1.5 bg-cyan-50 rounded-lg">
                   <span>📝</span>
                   <span className="text-gray-700">
                     <strong>{conversationHistory.length}</strong> in history
                   </span>
                 </div>
                 {compactedCount > 0 && (
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
+                  <div className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1.5 bg-green-50 rounded-lg">
                     <span>✨</span>
                     <span className="text-green-700">
                       <strong>Compacted {compactedCount}x</strong>
                     </span>
                   </div>
                 )}
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1.5 bg-blue-50 rounded-lg">
                   <span>🔢</span>
                   <span className="text-gray-700">
                     <strong>{totalTokens.toLocaleString()}</strong> tokens
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1.5 bg-green-50 rounded-lg">
                   <span>💰</span>
                   <span className="text-green-700">
                     <strong>${totalCost.toFixed(6)}</strong>
@@ -294,13 +294,13 @@ export default function Home() {
 
         {/* Personalization Notice */}
         {userPreferences && (
-          <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-4 mb-4 border-2 border-blue-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span className="text-xl">✨</span>
+          <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-3 md:p-4 mb-4 border-2 border-blue-200">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
+                <span className="text-lg md:text-xl">✨</span>
               </div>
               <div className="flex-1">
-                <p className="text-sm text-gray-800">
+                <p className="text-xs md:text-sm text-gray-800">
                   <strong className="text-blue-700">
                     Personalized Learning Active!
                   </strong>{" "}
@@ -313,23 +313,23 @@ export default function Home() {
         )}
 
         {/* Chat Messages */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4 h-[550px] overflow-y-auto">
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-3 md:p-6 mb-4 h-[400px] sm:h-[500px] md:h-[550px] overflow-y-auto">
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <span className="text-4xl">💬</span>
+              <div className="text-center px-4">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <span className="text-3xl md:text-4xl">💬</span>
                 </div>
-                <p className="text-xl font-semibold text-gray-700 mb-2">
+                <p className="text-lg md:text-xl font-semibold text-gray-700 mb-2">
                   Start your conversation!
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-xs md:text-sm text-gray-500">
                   Type a message below to begin learning
                 </p>
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -338,16 +338,16 @@ export default function Home() {
                   }`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl p-4 shadow-md ${
+                    className={`max-w-[85%] sm:max-w-[80%] rounded-xl md:rounded-2xl p-3 md:p-4 shadow-md ${
                       message.role === "user"
                         ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white"
                         : "bg-white border-2 border-gray-200 text-gray-800"
                     }`}
                   >
-                    <p className="whitespace-pre-wrap leading-relaxed">
+                    <p className="whitespace-pre-wrap leading-relaxed text-sm md:text-base">
                       {message.content}
                     </p>
-                    <div className="flex items-center gap-2 mt-3">
+                    <div className="flex items-center gap-2 mt-2 md:mt-3">
                       <p
                         className={`text-xs ${
                           message.role === "user"
@@ -379,7 +379,7 @@ export default function Home() {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 shadow-md">
+                  <div className="bg-white border-2 border-gray-200 rounded-xl md:rounded-2xl p-3 md:p-4 shadow-md">
                     <div className="flex gap-2">
                       <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce delay-100"></div>
@@ -394,54 +394,54 @@ export default function Home() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 border-2 border-red-300 text-red-700 px-6 py-4 rounded-2xl mb-4 shadow-lg backdrop-blur-lg">
+          <div className="bg-red-50 border-2 border-red-300 text-red-700 px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl mb-4 shadow-lg backdrop-blur-lg">
             <div className="flex items-center gap-2">
-              <span className="text-xl">⚠️</span>
+              <span className="text-lg md:text-xl">⚠️</span>
               <div>
-                <strong className="font-bold">Error</strong>
-                <p className="text-sm">{error}</p>
+                <strong className="font-bold text-sm md:text-base">Error</strong>
+                <p className="text-xs md:text-sm">{error}</p>
               </div>
             </div>
           </div>
         )}
 
         {/* Input Area */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6">
-          <div className="flex gap-3">
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-3 md:p-6">
+          <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Type your message here... (Press Enter to send)"
               disabled={isLoading}
-              className="flex-1 px-5 py-4 border-2 border-gray-200 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:opacity-50 disabled:bg-gray-50"
+              className="flex-1 px-3 md:px-5 py-3 md:py-4 border-2 border-gray-200 rounded-xl md:rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 disabled:opacity-50 disabled:bg-gray-50 text-sm md:text-base"
               rows={3}
             />
-            <div className="flex flex-col gap-2">
+            <div className="flex sm:flex-col gap-2">
               <button
                 onClick={sendMessage}
                 disabled={isLoading || !inputMessage.trim()}
-                className="px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 h-[56px]"
+                className="flex-1 sm:flex-none px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl md:rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 sm:h-[56px] text-sm md:text-base"
               >
-                <span className="text-xl">{isLoading ? "⏳" : "📤"}</span>
-                <span>{isLoading ? "Sending..." : "Send"}</span>
+                <span className="text-lg md:text-xl">{isLoading ? "⏳" : "📤"}</span>
+                <span className="hidden sm:inline">{isLoading ? "Sending..." : "Send"}</span>
+                <span className="sm:hidden">{isLoading ? "..." : "Send"}</span>
               </button>
               {messages.length > 0 && (
                 <button
                   onClick={clearChat}
-                  className="px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 h-[56px]"
+                  className="flex-1 sm:flex-none px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl md:rounded-2xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 sm:h-[56px] text-sm md:text-base"
                   title="Clear all messages"
                 >
-                  <span className="text-xl">🗑️</span>
-                  <span>Clear</span>
+                  <span className="text-lg md:text-xl">🗑️</span>
+                  <span className="hidden sm:inline">Clear</span>
                 </button>
               )}
             </div>
           </div>
-          <div className="flex items-center justify-between mt-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 md:mt-3 gap-1 sm:gap-0">
             <p className="text-xs text-gray-500">
-              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new
-              line
+              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new line
             </p>
             <p className="text-xs text-gray-400">
               Powered by Cerebras LLaMA 3.3

@@ -15,24 +15,24 @@ export default function VoiceChatPage() {
 
       <div className="relative max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 mb-4">
-          <div className="flex items-center justify-between">
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6 mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
                 <Image src="/logo.png" alt="AI Voice Chat" width={48} height={48} className="object-cover" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                   AI Voice Chat
                 </h1>
-                <p className="text-sm text-gray-600 mt-0.5">
+                <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
                   Practice speaking with your AI language teacher in real-time
                 </p>
               </div>
             </div>
             <Link
               href="/"
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm md:text-base w-full sm:w-auto text-center"
             >
               ← Text Chat
             </Link>

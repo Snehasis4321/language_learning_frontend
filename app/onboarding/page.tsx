@@ -235,41 +235,41 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 p-3 md:p-4 relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto pt-8 relative z-10">
+      <div className="max-w-4xl mx-auto pt-4 md:pt-8 relative z-10">
         {/* Progress bar */}
-        <div className="mb-8">
-          <div className="flex justify-between text-sm text-white/90 font-medium mb-3">
+        <div className="mb-6 md:mb-8">
+          <div className="flex justify-between text-xs md:text-sm text-white/90 font-medium mb-2 md:mb-3">
             <span>Step {step} of {totalSteps}</span>
             <span>{Math.round((step / totalSteps) * 100)}% Complete</span>
           </div>
-          <div className="w-full bg-white/20 backdrop-blur-sm rounded-full h-3 shadow-inner">
+          <div className="w-full bg-white/20 backdrop-blur-sm rounded-full h-2 md:h-3 shadow-inner">
             <div
-              className="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500 shadow-lg"
+              className="bg-gradient-to-r from-green-400 to-blue-500 h-2 md:h-3 rounded-full transition-all duration-500 shadow-lg"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Step content */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12">
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 lg:p-12">
           {step === 1 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 {localStorage.getItem('userId') ? 'Edit Your Profile ✏️' : 'Welcome! 👋'}
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 {localStorage.getItem('userId')
                   ? 'Update your language learning preferences'
                   : "Let's personalize your language learning experience"}
               </p>
-              <div className="space-y-5">
+              <div className="space-y-4 md:space-y-5">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     What's your name?
@@ -279,7 +279,7 @@ export default function OnboardingPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 text-sm md:text-base"
                   />
                 </div>
                 <div>
@@ -291,7 +291,7 @@ export default function OnboardingPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400"
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 text-sm md:text-base"
                   />
                 </div>
               </div>
@@ -300,10 +300,10 @@ export default function OnboardingPage() {
 
           {step === 2 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Which language do you want to learn? 🌍
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 Choose your target language and current level
               </p>
               <div className="space-y-6">
@@ -363,10 +363,10 @@ export default function OnboardingPage() {
 
           {step === 3 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 How do you learn best? 🎯
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 Select all that apply (we'll adapt our teaching style)
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -395,10 +395,10 @@ export default function OnboardingPage() {
 
           {step === 4 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Why are you learning? 🎓
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 Select your main goals
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
@@ -434,10 +434,10 @@ export default function OnboardingPage() {
 
           {step === 5 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 What do you want to focus on? 📚
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 Choose your priority areas
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -493,10 +493,10 @@ export default function OnboardingPage() {
 
           {step === 6 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 When can you practice? ⏰
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 Set your learning schedule
               </p>
               <div className="space-y-8">
@@ -571,10 +571,10 @@ export default function OnboardingPage() {
 
           {step === 7 && (
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Final preferences ⚙️
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8">
                 Customize your learning experience
               </p>
               <div className="space-y-8">
@@ -635,11 +635,11 @@ export default function OnboardingPage() {
           )}
 
           {/* Navigation buttons */}
-          <div className="flex justify-between mt-10 pt-8 border-t border-gray-200">
+          <div className="flex justify-between mt-8 md:mt-10 pt-6 md:pt-8 border-t border-gray-200">
             {step > 1 ? (
               <button
                 onClick={() => setStep(step - 1)}
-                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-semibold"
+                className="px-6 md:px-8 py-2.5 md:py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-semibold text-sm md:text-base"
               >
                 ← Back
               </button>
@@ -651,14 +651,14 @@ export default function OnboardingPage() {
               <button
                 onClick={() => setStep(step + 1)}
                 disabled={!canProceed()}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="px-6 md:px-8 py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
               >
                 Next →
               </button>
             ) : (
               <button
                 onClick={handleSubmit}
-                className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="px-6 md:px-8 py-2.5 md:py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
               >
                 {localStorage.getItem('userId') ? '✅ Save Changes' : '🎉 Start Learning!'}
               </button>
