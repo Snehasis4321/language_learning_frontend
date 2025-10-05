@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import VoiceChat from '@/components/VoiceChat';
-import Link from 'next/link';
-import Image from 'next/image';
+import VoiceChat from "@/components/VoiceChat";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function VoiceChatPage() {
   return (
@@ -19,7 +19,13 @@ export default function VoiceChatPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
-                <Image src="/logo.png" alt="AI Voice Chat" width={48} height={48} className="object-cover" />
+                <Image
+                  src="/logo.png"
+                  alt="AI Voice Chat"
+                  width={48}
+                  height={48}
+                  className="object-cover"
+                />
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
@@ -40,7 +46,11 @@ export default function VoiceChatPage() {
         </div>
 
         {/* Voice Chat Component */}
-        <VoiceChat backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000"} />
+        <VoiceChat
+          backendUrl={
+            process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3550"
+          }
+        />
       </div>
     </div>
   );

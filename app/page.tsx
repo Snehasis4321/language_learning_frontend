@@ -17,7 +17,8 @@ export default function Home() {
   const topic = "";
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
+  const backendUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3550";
   const [conversationHistory, setConversationHistory] = useState<
     Array<{ role: string; content: string }>
   >([]);
@@ -30,7 +31,10 @@ export default function Home() {
   );
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [userPreferences, setUserPreferences] = useState<Record<string, unknown> | null>(null);
+  const [userPreferences, setUserPreferences] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -410,7 +414,9 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <span className="text-lg md:text-xl">⚠️</span>
               <div>
-                <strong className="font-bold text-sm md:text-base">Error</strong>
+                <strong className="font-bold text-sm md:text-base">
+                  Error
+                </strong>
                 <p className="text-xs md:text-sm">{error}</p>
               </div>
             </div>
@@ -435,8 +441,12 @@ export default function Home() {
                 disabled={isLoading || !inputMessage.trim()}
                 className="flex-1 sm:flex-none px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl md:rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 sm:h-[56px] text-sm md:text-base"
               >
-                <span className="text-lg md:text-xl">{isLoading ? "⏳" : "📤"}</span>
-                <span className="hidden sm:inline">{isLoading ? "Sending..." : "Send"}</span>
+                <span className="text-lg md:text-xl">
+                  {isLoading ? "⏳" : "📤"}
+                </span>
+                <span className="hidden sm:inline">
+                  {isLoading ? "Sending..." : "Send"}
+                </span>
                 <span className="sm:hidden">{isLoading ? "..." : "Send"}</span>
               </button>
               {messages.length > 0 && (
@@ -453,7 +463,8 @@ export default function Home() {
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 md:mt-3 gap-1 sm:gap-0">
             <p className="text-xs text-gray-500">
-              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new line
+              💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new
+              line
             </p>
             <p className="text-xs text-gray-400">
               Powered by Cerebras LLaMA 3.3

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface UserProfile {
   id: string;
@@ -46,14 +46,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const loadProfile = async () => {
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem("userId");
       if (!userId) {
-        router.push('/onboarding');
+        router.push("/onboarding");
         return;
       }
 
       try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+        const backendUrl =
+          process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3550";
         const [profileRes, progressRes] = await Promise.all([
           fetch(`${backendUrl}/api/users/profile/${userId}`),
           fetch(`${backendUrl}/api/users/progress/${userId}`),
@@ -69,7 +70,7 @@ export default function ProfilePage() {
           setProgress(progressData.progress);
         }
       } catch (error) {
-        console.error('Error loading profile:', error);
+        console.error("Error loading profile:", error);
       } finally {
         setLoading(false);
       }
@@ -81,7 +82,9 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
-        <div className="text-2xl text-gray-600 dark:text-gray-400">Loading...</div>
+        <div className="text-2xl text-gray-600 dark:text-gray-400">
+          Loading...
+        </div>
       </div>
     );
   }
@@ -90,7 +93,9 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">No profile found</p>
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
+            No profile found
+          </p>
           <Link
             href="/onboarding"
             className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
@@ -111,7 +116,13 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 md:mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
-              <Image src="/logo.png" alt="Your Profile" width={48} height={48} className="object-cover" />
+              <Image
+                src="/logo.png"
+                alt="Your Profile"
+                width={48}
+                height={48}
+                className="object-cover"
+              />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
               Your Profile
@@ -133,28 +144,36 @@ export default function ProfilePage() {
               <div className="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">
                 {progress.totalLearningMinutes}
               </div>
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Minutes Learned</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                Minutes Learned
+              </div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
               <div className="text-3xl md:text-4xl mb-2">💬</div>
               <div className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400">
                 {progress.conversationsCompleted}
               </div>
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Conversations</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                Conversations
+              </div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
               <div className="text-3xl md:text-4xl mb-2">🔥</div>
               <div className="text-xl md:text-2xl font-bold text-orange-600 dark:text-orange-400">
                 {progress.currentStreak}
               </div>
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Day Streak</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                Day Streak
+              </div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
               <div className="text-3xl md:text-4xl mb-2">🎯</div>
               <div className="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">
                 {Math.round(progress.weeklyGoalProgress)}%
               </div>
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Weekly Goal</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                Weekly Goal
+              </div>
             </div>
           </div>
         )}
@@ -167,21 +186,27 @@ export default function ProfilePage() {
             </h2>
             <div className="space-y-2 md:space-y-3">
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Name</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Name
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
                   {profile.name}
                 </div>
               </div>
               {profile.email && (
                 <div>
-                  <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Email</div>
+                  <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                    Email
+                  </div>
                   <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white break-all">
                     {profile.email}
                   </div>
                 </div>
               )}
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Member Since</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Member Since
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
                   {formatDate(profile.createdAt)}
                 </div>
@@ -196,21 +221,27 @@ export default function ProfilePage() {
             </h2>
             <div className="space-y-2 md:space-y-3">
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Target Language</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Target Language
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
                   🎯 {profile.preferences.targetLanguage}
                 </div>
               </div>
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Native Language</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Native Language
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
                   🏠 {profile.preferences.nativeLanguage}
                 </div>
               </div>
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Proficiency Level</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Proficiency Level
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
-                  📊 {profile.preferences.proficiencyLevel.replace(/_/g, ' ')}
+                  📊 {profile.preferences.proficiencyLevel.replace(/_/g, " ")}
                 </div>
               </div>
             </div>
@@ -227,13 +258,15 @@ export default function ProfilePage() {
                   key={goal}
                   className="px-2.5 md:px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs md:text-sm"
                 >
-                  {goal.replace(/_/g, ' ')}
+                  {goal.replace(/_/g, " ")}
                 </span>
               ))}
             </div>
             {profile.preferences.motivation && (
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">Motivation</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Motivation
+                </div>
                 <div className="text-sm md:text-base text-gray-800 dark:text-white italic">
                   &quot;{profile.preferences.motivation}&quot;
                 </div>
@@ -286,7 +319,7 @@ export default function ProfilePage() {
                   key={style}
                   className="px-2.5 md:px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded-full text-xs md:text-sm"
                 >
-                  {style.replace(/_/g, ' ')}
+                  {style.replace(/_/g, " ")}
                 </span>
               ))}
             </div>
@@ -299,7 +332,9 @@ export default function ProfilePage() {
             </h2>
             <div className="space-y-2 md:space-y-3">
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Daily Goal</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Daily Goal
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
                   {profile.preferences.dailyGoalMinutes} minutes/day
                 </div>
@@ -329,7 +364,7 @@ export default function ProfilePage() {
                       key={time}
                       className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-xs md:text-sm"
                     >
-                      {time.replace(/_/g, ' ')}
+                      {time.replace(/_/g, " ")}
                     </span>
                   ))}
                 </div>
@@ -344,15 +379,19 @@ export default function ProfilePage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Voice Speed</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Voice Speed
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
-                  {profile.preferences.preferredVoiceSpeed.replace(/_/g, ' ')}
+                  {profile.preferences.preferredVoiceSpeed.replace(/_/g, " ")}
                 </div>
               </div>
               <div>
-                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Correction Style</div>
+                <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                  Correction Style
+                </div>
                 <div className="text-base md:text-lg font-medium text-gray-800 dark:text-white">
-                  {profile.preferences.correctionStyle.replace(/_/g, ' ')}
+                  {profile.preferences.correctionStyle.replace(/_/g, " ")}
                 </div>
               </div>
             </div>

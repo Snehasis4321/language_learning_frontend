@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   LiveKitRoom,
   RoomAudioRenderer,
@@ -11,9 +11,9 @@ import {
   useRoomInfo,
   useTranscriptions,
   useLocalParticipant,
-} from '@livekit/components-react';
-import { ConnectionState } from 'livekit-client';
-import '@livekit/components-styles';
+} from "@livekit/components-react";
+import { ConnectionState } from "livekit-client";
+import "@livekit/components-styles";
 
 interface VoiceChatProps {
   backendUrl?: string;
@@ -27,23 +27,24 @@ function VoiceAssistantUI() {
   const { localParticipant } = useLocalParticipant();
 
   // Get local participant's audio track SIDs for comparison
-  const localAudioTrackSids = Array.from(localParticipant?.audioTrackPublications?.values() || [])
-    .map(pub => pub.trackSid);
+  const localAudioTrackSids = Array.from(
+    localParticipant?.audioTrackPublications?.values() || []
+  ).map((pub) => pub.trackSid);
 
   // Ref for auto-scrolling transcripts
   const transcriptEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new transcripts arrive
   useEffect(() => {
-    transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    transcriptEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [allTranscriptions]);
 
   // Debug: Log transcriptions when they change
   useEffect(() => {
-    console.log('🔍 Transcriptions updated:', allTranscriptions);
-    console.log('🔍 Number of transcriptions:', allTranscriptions.length);
-    console.log('🔍 Local participant identity:', localParticipant?.identity);
-    console.log('🔍 Local audio track SIDs:', localAudioTrackSids);
+    console.log("🔍 Transcriptions updated:", allTranscriptions);
+    console.log("🔍 Number of transcriptions:", allTranscriptions.length);
+    console.log("🔍 Local participant identity:", localParticipant?.identity);
+    console.log("🔍 Local audio track SIDs:", localAudioTrackSids);
   }, [allTranscriptions, localParticipant, localAudioTrackSids]);
 
   return (
@@ -52,13 +53,15 @@ function VoiceAssistantUI() {
       <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-              connectionState === ConnectionState.Connected
-                ? 'bg-gradient-to-r from-green-500 to-green-600'
-                : 'bg-gradient-to-r from-yellow-500 to-yellow-600'
-            }`}>
+            <div
+              className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                connectionState === ConnectionState.Connected
+                  ? "bg-gradient-to-r from-green-500 to-green-600"
+                  : "bg-gradient-to-r from-yellow-500 to-yellow-600"
+              }`}
+            >
               <span className="text-white text-xl font-bold">
-                {connectionState === ConnectionState.Connected ? '✓' : '⏳'}
+                {connectionState === ConnectionState.Connected ? "✓" : "⏳"}
               </span>
             </div>
             <div>
@@ -85,23 +88,36 @@ function VoiceAssistantUI() {
         <div className="flex flex-col items-center space-y-6">
           {/* Status Indicator with Pulse Animation */}
           <div className="relative">
-            <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${
-              state === 'listening' ? 'bg-green-500' :
-              state === 'thinking' ? 'bg-yellow-500' :
-              state === 'speaking' ? 'bg-blue-500' :
-              'bg-gray-400'
-            }`}></div>
-            <div className={`relative p-8 md:p-12 rounded-full shadow-2xl transition-all duration-300 ${
-              state === 'listening' ? 'bg-gradient-to-br from-green-500 to-green-600' :
-              state === 'thinking' ? 'bg-gradient-to-br from-yellow-500 to-yellow-600' :
-              state === 'speaking' ? 'bg-gradient-to-br from-blue-600 to-cyan-600' :
-              'bg-gradient-to-br from-gray-400 to-gray-500'
-            }`}>
+            <div
+              className={`absolute inset-0 rounded-full animate-ping opacity-20 ${
+                state === "listening"
+                  ? "bg-green-500"
+                  : state === "thinking"
+                  ? "bg-yellow-500"
+                  : state === "speaking"
+                  ? "bg-blue-500"
+                  : "bg-gray-400"
+              }`}
+            ></div>
+            <div
+              className={`relative p-8 md:p-12 rounded-full shadow-2xl transition-all duration-300 ${
+                state === "listening"
+                  ? "bg-gradient-to-br from-green-500 to-green-600"
+                  : state === "thinking"
+                  ? "bg-gradient-to-br from-yellow-500 to-yellow-600"
+                  : state === "speaking"
+                  ? "bg-gradient-to-br from-blue-600 to-cyan-600"
+                  : "bg-gradient-to-br from-gray-400 to-gray-500"
+              }`}
+            >
               <div className="text-6xl md:text-8xl">
-                {state === 'listening' ? '👂' :
-                 state === 'thinking' ? '🤔' :
-                 state === 'speaking' ? '🗣️' :
-                 '💭'}
+                {state === "listening"
+                  ? "👂"
+                  : state === "thinking"
+                  ? "🤔"
+                  : state === "speaking"
+                  ? "🗣️"
+                  : "💭"}
               </div>
             </div>
           </div>
@@ -112,10 +128,13 @@ function VoiceAssistantUI() {
               {state}
             </h3>
             <p className="text-gray-600 text-base md:text-lg max-w-md">
-              {state === 'listening' ? 'I\'m listening to you...' :
-               state === 'thinking' ? 'Let me think about that...' :
-               state === 'speaking' ? 'Here\'s what I think...' :
-               'Start speaking to begin the conversation'}
+              {state === "listening"
+                ? "I'm listening to you..."
+                : state === "thinking"
+                ? "Let me think about that..."
+                : state === "speaking"
+                ? "Here's what I think..."
+                : "Start speaking to begin the conversation"}
             </p>
           </div>
         </div>
@@ -131,35 +150,44 @@ function VoiceAssistantUI() {
           <div className="space-y-3 md:space-y-4 max-h-96 md:max-h-[32rem] overflow-y-auto pr-2 custom-scrollbar">
             {allTranscriptions.map((transcription, idx) => {
               // Check if this is user speech by comparing transcribed track ID
-              const transcribedTrackId = transcription.streamInfo?.attributes?.['lk.transcribed_track_id'];
+              const transcribedTrackId =
+                transcription.streamInfo?.attributes?.[
+                  "lk.transcribed_track_id"
+                ];
 
               // User speech: transcription of local participant's audio track
               // Agent speech: transcription of agent's audio track
-              const isUser = localAudioTrackSids.includes(transcribedTrackId || '');
+              const isUser = localAudioTrackSids.includes(
+                transcribedTrackId || ""
+              );
 
               return (
                 <div
                   key={transcription.streamInfo?.streamId || idx}
-                  className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                  className={`flex ${
+                    isUser ? "justify-end" : "justify-start"
+                  } animate-fade-in`}
                 >
                   <div
                     className={`max-w-[85%] md:max-w-[75%] rounded-2xl p-4 md:p-5 shadow-lg transition-all duration-200 hover:shadow-xl ${
                       isUser
-                        ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white'
-                        : 'bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 text-gray-800'
+                        ? "bg-gradient-to-br from-blue-600 to-cyan-600 text-white"
+                        : "bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 text-gray-800"
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg">
-                        {isUser ? '👤' : '🤖'}
-                      </span>
-                      <p className={`text-sm font-bold ${
-                        isUser ? 'text-white/90' : 'text-gray-700'
-                      }`}>
-                        {isUser ? 'You' : 'AI Teacher'}
+                      <span className="text-lg">{isUser ? "👤" : "🤖"}</span>
+                      <p
+                        className={`text-sm font-bold ${
+                          isUser ? "text-white/90" : "text-gray-700"
+                        }`}
+                      >
+                        {isUser ? "You" : "AI Teacher"}
                       </p>
                     </div>
-                    <p className="text-sm md:text-base leading-relaxed">{transcription.text}</p>
+                    <p className="text-sm md:text-base leading-relaxed">
+                      {transcription.text}
+                    </p>
                   </div>
                 </div>
               );
@@ -199,21 +227,23 @@ function VoiceAssistantUI() {
   );
 }
 
-export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000' }: VoiceChatProps) {
+export default function VoiceChat({
+  backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3550",
+}: VoiceChatProps) {
   // State for userId - initialized after mount to avoid hydration mismatch
   const [storedUserId, setStoredUserId] = useState<string | null>(null);
 
   const [sessionConfig, setSessionConfig] = useState({
-    difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
-    topic: '',
-    userId: '',
+    difficulty: "beginner" as "beginner" | "intermediate" | "advanced",
+    topic: "",
+    userId: "",
   });
 
   // Initialize userId after component mounts (client-side only)
   useEffect(() => {
-    const userId = localStorage.getItem('userId') || `user_${Date.now()}`;
-    setStoredUserId(localStorage.getItem('userId'));
-    setSessionConfig(prev => ({ ...prev, userId }));
+    const userId = localStorage.getItem("userId") || `user_${Date.now()}`;
+    setStoredUserId(localStorage.getItem("userId"));
+    setSessionConfig((prev) => ({ ...prev, userId }));
   }, []);
   const [isConfigured, setIsConfigured] = useState(false);
   const [connectionInfo, setConnectionInfo] = useState<{
@@ -223,15 +253,15 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
     sessionId: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const startSession = async () => {
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       // Get user preferences from localStorage
-      const userProfileStr = localStorage.getItem('userProfile');
+      const userProfileStr = localStorage.getItem("userProfile");
       let userPreferences = null;
       let userName = null;
 
@@ -242,17 +272,17 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
           userPreferences = userProfile.preferences || userProfile; // Handle both formats
           userName = userProfile.name;
         } catch (e) {
-          console.error('Error parsing user profile:', e);
+          console.error("Error parsing user profile:", e);
         }
       }
 
       const response = await fetch(`${backendUrl}/api/conversation/start`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          type: 'free',
+          type: "free",
           difficulty: sessionConfig.difficulty,
           topic: sessionConfig.topic || undefined,
           userId: sessionConfig.userId,
@@ -274,8 +304,8 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
       });
       setIsConfigured(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to start session');
-      console.error('Error starting session:', err);
+      setError(err instanceof Error ? err.message : "Failed to start session");
+      console.error("Error starting session:", err);
     } finally {
       setIsLoading(false);
     }
@@ -285,11 +315,14 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
     if (!connectionInfo) return;
 
     try {
-      await fetch(`${backendUrl}/api/conversation/${connectionInfo.sessionId}/end`, {
-        method: 'POST',
-      });
+      await fetch(
+        `${backendUrl}/api/conversation/${connectionInfo.sessionId}/end`,
+        {
+          method: "POST",
+        }
+      );
     } catch (err) {
-      console.error('Error ending session:', err);
+      console.error("Error ending session:", err);
     }
 
     setConnectionInfo(null);
@@ -300,9 +333,12 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
   useEffect(() => {
     return () => {
       if (connectionInfo) {
-        fetch(`${backendUrl}/api/conversation/${connectionInfo.sessionId}/end`, {
-          method: 'POST',
-        }).catch(console.error);
+        fetch(
+          `${backendUrl}/api/conversation/${connectionInfo.sessionId}/end`,
+          {
+            method: "POST",
+          }
+        ).catch(console.error);
       }
     };
   }, [connectionInfo, backendUrl]);
@@ -313,7 +349,13 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
         <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
           <div className="text-center mb-6">
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden">
-              <Image src="/logo.png" alt="Voice Chat" width={80} height={80} className="object-cover" />
+              <Image
+                src="/logo.png"
+                alt="Voice Chat"
+                width={80}
+                height={80}
+                className="object-cover"
+              />
             </div>
             <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Start Voice Conversation
@@ -328,7 +370,10 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
                 </div>
                 <div className="flex-1">
                   <p className="text-xs md:text-sm text-gray-800">
-                    <strong className="text-blue-700">Personalized Learning Active!</strong> Your AI teacher will adapt to your preferences and goals.
+                    <strong className="text-blue-700">
+                      Personalized Learning Active!
+                    </strong>{" "}
+                    Your AI teacher will adapt to your preferences and goals.
                   </p>
                 </div>
               </div>
@@ -364,7 +409,10 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
                 type="text"
                 value={sessionConfig.topic}
                 onChange={(e) =>
-                  setSessionConfig((prev) => ({ ...prev, topic: e.target.value }))
+                  setSessionConfig((prev) => ({
+                    ...prev,
+                    topic: e.target.value,
+                  }))
                 }
                 placeholder="e.g., Travel, Food, Business"
                 className="w-full px-3 md:px-4 py-2.5 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 text-gray-900 placeholder-gray-400 text-sm md:text-base"
@@ -376,7 +424,9 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
                 <div className="flex items-center gap-2">
                   <span className="text-lg md:text-xl">⚠️</span>
                   <div>
-                    <strong className="font-bold text-sm md:text-base">Error</strong>
+                    <strong className="font-bold text-sm md:text-base">
+                      Error
+                    </strong>
                     <p className="text-xs md:text-sm">{error}</p>
                   </div>
                 </div>
@@ -388,7 +438,7 @@ export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND
               disabled={isLoading}
               className="w-full px-6 py-3.5 md:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl md:rounded-2xl hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
             >
-              {isLoading ? '⏳ Starting...' : '🎤 Start Voice Chat'}
+              {isLoading ? "⏳ Starting..." : "🎤 Start Voice Chat"}
             </button>
           </div>
         </div>
