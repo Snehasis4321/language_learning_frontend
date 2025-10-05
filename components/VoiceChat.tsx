@@ -27,11 +27,17 @@ function VoiceAssistantUI() {
   const allTranscriptions = useTranscriptions();
   const { localParticipant } = useLocalParticipant();
 
+  // Get local participant's audio track SIDs for comparison
+  const localAudioTrackSids = Array.from(localParticipant?.audioTrackPublications?.values() || [])
+    .map(pub => pub.trackSid);
+
   // Debug: Log transcriptions when they change
   useEffect(() => {
     console.log('🔍 Transcriptions updated:', allTranscriptions);
     console.log('🔍 Number of transcriptions:', allTranscriptions.length);
-  }, [allTranscriptions]);
+    console.log('🔍 Local participant identity:', localParticipant?.identity);
+    console.log('🔍 Local audio track SIDs:', localAudioTrackSids);
+  }, [allTranscriptions, localParticipant, localAudioTrackSids]);
 
   return (
     <div className="space-y-3 md:space-y-4">
@@ -68,76 +74,85 @@ function VoiceAssistantUI() {
       </div>
 
       {/* Voice Assistant Status */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
-        <div className="text-center space-y-4 md:space-y-6">
-          <div className="inline-block p-6 md:p-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full shadow-2xl">
-            <div className="text-5xl md:text-7xl animate-pulse">
-              {state === 'listening' && '👂'}
-              {state === 'thinking' && '🤔'}
-              {state === 'speaking' && '🗣️'}
-              {state === 'idle' && '💭'}
+      <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-8 md:p-10">
+        <div className="flex flex-col items-center space-y-6">
+          {/* Status Indicator with Pulse Animation */}
+          <div className="relative">
+            <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${
+              state === 'listening' ? 'bg-green-500' :
+              state === 'thinking' ? 'bg-yellow-500' :
+              state === 'speaking' ? 'bg-blue-500' :
+              'bg-gray-400'
+            }`}></div>
+            <div className={`relative p-8 md:p-12 rounded-full shadow-2xl transition-all duration-300 ${
+              state === 'listening' ? 'bg-gradient-to-br from-green-500 to-green-600' :
+              state === 'thinking' ? 'bg-gradient-to-br from-yellow-500 to-yellow-600' :
+              state === 'speaking' ? 'bg-gradient-to-br from-blue-600 to-cyan-600' :
+              'bg-gradient-to-br from-gray-400 to-gray-500'
+            }`}>
+              <div className="text-6xl md:text-8xl">
+                {state === 'listening' && '👂'}
+                {state === 'thinking' && '🤔'}
+                {state === 'speaking' && '🗣️'}
+                {state === 'idle' && '💭'}
+              </div>
             </div>
           </div>
 
-          <div>
-            <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent capitalize">
+          {/* Status Text */}
+          <div className="text-center">
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-800 capitalize mb-2">
               {state}
             </h3>
-            <p className="text-gray-600 mt-2 text-base md:text-lg px-4">
+            <p className="text-gray-600 text-base md:text-lg max-w-md">
               {state === 'listening' && 'I\'m listening to you...'}
               {state === 'thinking' && 'Let me think about that...'}
               {state === 'speaking' && 'Here\'s what I think...'}
               {state === 'idle' && 'Start speaking to begin the conversation'}
             </p>
           </div>
-
-          {/* Audio Visualizer */}
-          {audioTrack && (
-            <div className="w-full max-w-md mx-auto h-20 md:h-24 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-xl md:rounded-2xl overflow-hidden border-2 border-blue-200">
-              <BarVisualizer
-                state={state}
-                barCount={30}
-                trackRef={audioTrack}
-                className="h-full"
-                options={{
-                  barWidth: 4,
-                  barSpacing: 2,
-                  minHeight: 4,
-                }}
-              />
-            </div>
-          )}
         </div>
       </div>
 
       {/* Transcription Display */}
       {allTranscriptions.length > 0 && (
-        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-bold text-gray-800 mb-3 md:mb-4 flex items-center gap-2">
-            <span className="text-xl md:text-2xl">📝</span>
+        <div className="bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
+          <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">📝</span>
             Conversation Transcript
           </h3>
-          <div className="space-y-2 md:space-y-3 max-h-64 md:max-h-80 overflow-y-auto">
+          <div className="space-y-3 md:space-y-4 max-h-96 md:max-h-[32rem] overflow-y-auto pr-2 custom-scrollbar">
             {allTranscriptions.map((transcription, idx) => {
-              const isUser = transcription.participantInfo?.identity === localParticipant?.identity;
+              // Check if this is user speech by comparing transcribed track ID
+              const transcribedTrackId = transcription.streamInfo?.attributes?.['lk.transcribed_track_id'];
+
+              // User speech: transcription of local participant's audio track
+              // Agent speech: transcription of agent's audio track
+              const isUser = localAudioTrackSids.includes(transcribedTrackId || '');
+
               return (
                 <div
                   key={transcription.streamInfo?.streamId || idx}
-                  className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}
                 >
                   <div
-                    className={`max-w-[90%] sm:max-w-[85%] rounded-xl md:rounded-2xl p-3 md:p-4 shadow-md ${
+                    className={`max-w-[85%] md:max-w-[75%] rounded-2xl p-4 md:p-5 shadow-lg transition-all duration-200 hover:shadow-xl ${
                       isUser
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
-                        : 'bg-white border-2 border-gray-200 text-gray-800'
+                        ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white'
+                        : 'bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 text-gray-800'
                     }`}
                   >
-                    <p className={`text-xs font-semibold mb-1 ${
-                      isUser ? 'text-white/70' : 'text-gray-500'
-                    }`}>
-                      {isUser ? 'You' : 'AI Teacher'}
-                    </p>
-                    <p className="text-xs md:text-sm leading-relaxed">{transcription.text}</p>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">
+                        {isUser ? '👤' : '🤖'}
+                      </span>
+                      <p className={`text-sm font-bold ${
+                        isUser ? 'text-white/90' : 'text-gray-700'
+                      }`}>
+                        {isUser ? 'You' : 'AI Teacher'}
+                      </p>
+                    </div>
+                    <p className="text-sm md:text-base leading-relaxed">{transcription.text}</p>
                   </div>
                 </div>
               );
@@ -176,14 +191,21 @@ function VoiceAssistantUI() {
 }
 
 export default function VoiceChat({ backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000' }: VoiceChatProps) {
-  // Get userId from localStorage if available
-  const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+  // State for userId - initialized after mount to avoid hydration mismatch
+  const [storedUserId, setStoredUserId] = useState<string | null>(null);
 
   const [sessionConfig, setSessionConfig] = useState({
     difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
     topic: '',
-    userId: storedUserId || `user_${Date.now()}`,
+    userId: '',
   });
+
+  // Initialize userId after component mounts (client-side only)
+  useEffect(() => {
+    const userId = localStorage.getItem('userId') || `user_${Date.now()}`;
+    setStoredUserId(localStorage.getItem('userId'));
+    setSessionConfig(prev => ({ ...prev, userId }));
+  }, []);
   const [isConfigured, setIsConfigured] = useState(false);
   const [connectionInfo, setConnectionInfo] = useState<{
     token: string;
