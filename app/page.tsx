@@ -138,6 +138,7 @@ export default function Home() {
       }
 
       setPlayingIndex(index);
+      setError(""); // Clear any previous errors
 
       // Call backend to generate TTS
       const response = await fetch(`${backendUrl}/api/conversation/tts`, {
@@ -160,15 +161,26 @@ export default function Home() {
       const audio = new Audio(audioUrl);
       setAudioElement(audio);
 
+      let hasPlayed = false;
+
+      audio.onplay = () => {
+        hasPlayed = true;
+        setError(""); // Clear error when audio starts playing
+      };
+
       audio.onended = () => {
         setPlayingIndex(null);
         URL.revokeObjectURL(audioUrl);
       };
 
-      audio.onerror = () => {
-        setPlayingIndex(null);
-        setError("Failed to play audio");
-        URL.revokeObjectURL(audioUrl);
+      audio.onerror = (e) => {
+        // Only show error if audio never successfully played
+        if (!hasPlayed) {
+          console.error("Audio error:", e);
+          setPlayingIndex(null);
+          setError("Failed to play audio");
+          URL.revokeObjectURL(audioUrl);
+        }
       };
 
       await audio.play();
