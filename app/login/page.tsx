@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,13 +8,20 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, signup } = useAuth();
+  const { user, login, signup } = useAuth();
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Redirect authenticated users to home page
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,8 +60,14 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md px-4 sm:px-0">
         {/* Logo/Header Section */}
         <div className="text-center mb-6 md:mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl shadow-lg mb-4 overflow-hidden">
-            <Image src="/logo.png" alt="Language Learning" width={64} height={64} className="object-cover" />
+          <div className="inline-flex p-1 items-center justify-center w-18 h-18 md:w-20 md:h-20 bg-white rounded-xl md:rounded-2xl shadow-lg mb-4 overflow-hidden">
+            <Image
+              src="/logo.png"
+              alt="Language Learning"
+              width={72}
+              height={72}
+              className="object-cover"
+            />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Language Learning
@@ -187,12 +200,6 @@ export default function LoginPage() {
                 Forgot your password?
               </Link>
             )}
-            <Link
-              href="/"
-              className="block text-xs md:text-sm text-gray-600 hover:text-gray-900 font-medium"
-            >
-              Continue as guest →
-            </Link>
           </div>
         </div>
 

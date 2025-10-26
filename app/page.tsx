@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "../contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface Message {
   role: "user" | "assistant";
@@ -11,6 +13,8 @@ interface Message {
 }
 
 export default function Home() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const difficulty = "beginner";
@@ -37,6 +41,13 @@ export default function Home() {
   > | null>(null);
 
   useEffect(() => {
+    // If user is not authenticated, redirect to login
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    // Get user info from localStorage for backward compatibility
     const storedUserId = localStorage.getItem("userId");
     const storedProfile = localStorage.getItem("userProfile");
 
@@ -53,7 +64,20 @@ export default function Home() {
         console.error("Error parsing user profile:", e);
       }
     }
-  }, []);
+  }, [user, router]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Clear local storage
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userProfile");
+      // Redirect to login
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -236,17 +260,19 @@ export default function Home() {
                   className="object-cover"
                 />
               </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  AI Language Teacher
-                </h1>
-                {userName && (
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                    Welcome back,{" "}
-                    <strong className="text-blue-700">{userName}</strong>!
-                  </p>
-                )}
-              </div>
+                <div>
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                    AI Language Teacher
+                  </h1>
+                  {user && (
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                      Welcome back,{" "}
+                      <strong className="text-blue-700">
+                        {userName || user.email || "User"}
+                      </strong>!
+                    </p>
+                  )}
+                </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
               <Link
@@ -265,6 +291,14 @@ export default function Home() {
               >
                 <span>Voice Chat</span>
               </Link>
+              {user && (
+                <button
+                  onClick={handleLogout}
+                  className="px-4 md:px-5 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base"
+                >
+                  <span>Logout</span>
+                </button>
+              )}
             </div>
           </div>
 

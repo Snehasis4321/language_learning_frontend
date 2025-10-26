@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface UserPreferences {
   targetLanguage: string;
@@ -161,6 +162,7 @@ const TIME_OF_DAY = [
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -184,6 +186,14 @@ export default function OnboardingPage() {
   });
 
   const totalSteps = 7;
+
+  useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+  }, [user, router]);
 
   // Load existing preferences from localStorage on mount
   useEffect(() => {

@@ -1,10 +1,36 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import VoiceChat from "@/components/VoiceChat";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function VoiceChatPage() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+  }, [user, router]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Clear local storage
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userProfile");
+      // Redirect to login
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 p-4">
       {/* Background decorative elements */}
@@ -34,14 +60,32 @@ export default function VoiceChatPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
                   Practice speaking with your AI language teacher in real-time
                 </p>
+                {user && (
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                    Welcome back,{" "}
+                    <strong className="text-blue-700">
+                      {user.email || "User"}
+                    </strong>!
+                  </p>
+                )}
               </div>
             </div>
-            <Link
-              href="/"
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm md:text-base w-full sm:w-auto text-center"
-            >
-              ← Text Chat
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+              <Link
+                href="/"
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm md:text-base w-full sm:w-auto text-center"
+              >
+                ← Text Chat
+              </Link>
+              {user && (
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base w-full sm:w-auto"
+                >
+                  Logout
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
