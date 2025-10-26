@@ -13,7 +13,7 @@ interface Message {
 }
 
 export default function Home() {
-  const { user, logout } = useAuth();
+  const { user, logout, getIdToken } = useAuth();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
@@ -94,12 +94,16 @@ export default function Home() {
     setError("");
 
     try {
+      // Get JWT token for authentication
+      const token = await getIdToken();
+
       const response = await fetch(
         `${backendUrl}/api/conversation/test-cerebras`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
           body: JSON.stringify({
             message: inputMessage,

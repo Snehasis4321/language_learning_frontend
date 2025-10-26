@@ -56,8 +56,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const getIdToken = async () => {
     try {
-      const session = await account.getSession('current');
-      return session.providerAccessToken;
+      const jwt = await account.createJWT();
+      return jwt.jwt;
     } catch (error) {
       return null;
     }
