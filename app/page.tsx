@@ -264,19 +264,20 @@ export default function Home() {
                   className="object-cover"
                 />
               </div>
-                <div>
-                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                    AI Language Teacher
-                  </h1>
-                  {user && (
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                      Welcome back,{" "}
-                      <strong className="text-blue-700">
-                        {userName || user.email || "User"}
-                      </strong>!
-                    </p>
-                  )}
-                </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                  AI Language Teacher
+                </h1>
+                {user && (
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                    Welcome back,{" "}
+                    <strong className="text-blue-700">
+                      {userName || user.email || "User"}
+                    </strong>
+                    !
+                  </p>
+                )}
+              </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
               <Link
@@ -504,9 +505,7 @@ export default function Home() {
               💡 <strong>Tip:</strong> Press Enter to send, Shift+Enter for new
               line
             </p>
-            <p className="text-xs text-gray-400">
-              Powered by Cerebras LLaMA 3.3
-            </p>
+            <p className="text-xs text-gray-400">Powered by LLaMA 3.3</p>
           </div>
         </div>
       </div>
