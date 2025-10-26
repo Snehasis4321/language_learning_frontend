@@ -1,18 +1,11 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import {
-  User,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-} from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { Models, Account } from 'appwrite';
+import { account } from '../lib/appwrite';
 
 interface AuthContextType {
-  user: User | null;
+  user: Models.User<Models.Preferences> | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
@@ -24,37 +17,50 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return unsubscribe;
+    checkUser();
   }, []);
 
+  const checkUser = async () => {
+    try {
+      const user = await account.get();
+      setUser(user);
+    } catch (error) {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    await account.createEmailPasswordSession(email, password);
+    await checkUser();
   };
 
   const signup = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password);
+    await account.create('unique()', email, password);
+    await login(email, password);
   };
 
   const logout = async () => {
-    await signOut(auth);
+    await account.deleteSession('current');
+    setUser(null);
   };
 
   const resetPassword = async (email: string) => {
-    await sendPasswordResetEmail(auth, email);
+    await account.createRecovery(email, `${window.location.origin}/reset-password`);
   };
 
   const getIdToken = async () => {
-    if (!user) return null;
-    return await user.getIdToken();
+    try {
+      const session = await account.getSession('current');
+      return session.providerAccessToken;
+    } catch (error) {
+      return null;
+    }
   };
 
   const value = {
