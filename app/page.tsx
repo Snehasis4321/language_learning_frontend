@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import MessageHistory from "../components/MessageHistory";
 
 interface Message {
   role: "user" | "assistant";
@@ -39,6 +40,7 @@ export default function Home() {
     string,
     unknown
   > | null>(null);
+  const [showMessageHistory, setShowMessageHistory] = useState(false);
 
   useEffect(() => {
     // If user is not authenticated, redirect to login
@@ -279,17 +281,23 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-              <Link
-                href="/onboarding"
-                className={`px-4 md:px-5 py-2.5 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base ${
-                  userId
-                    ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    : "bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700"
-                }`}
-              >
-                <span>{userId ? "Edit Preferences" : "Create Profile"}</span>
-              </Link>
+             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+               <button
+                 onClick={() => setShowMessageHistory(true)}
+                 className="px-4 md:px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base"
+               >
+                 <span>📚 History</span>
+               </button>
+               <Link
+                 href="/onboarding"
+                 className={`px-4 md:px-5 py-2.5 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base ${
+                   userId
+                     ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                     : "bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700"
+                 }`}
+               >
+                 <span>{userId ? "Edit Preferences" : "Create Profile"}</span>
+               </Link>
               <Link
                 href="/voice"
                 className="px-4 md:px-5 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm md:text-base"
@@ -509,6 +517,12 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Message History Modal */}
+      <MessageHistory
+        isOpen={showMessageHistory}
+        onClose={() => setShowMessageHistory(false)}
+      />
     </div>
   );
 }
