@@ -61,6 +61,19 @@ export default function MessageHistory({
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEsc);
+      return () => document.removeEventListener("keydown", handleEsc);
+    }
+  }, [isOpen, onClose]);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return (
@@ -99,7 +112,10 @@ export default function MessageHistory({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+      <div
+        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-4 md:p-6">
           <div className="flex items-center justify-between">
@@ -119,7 +135,7 @@ export default function MessageHistory({
         </div>
 
         {/* Content */}
-        <div className="p-4 md:p-6 max-h-[60vh] overflow-y-auto">
+        <div className="flex-1 p-4 md:p-6 overflow-y-auto">
           {loading && (
             <div className="flex items-center justify-center py-8">
               <div className="flex gap-2">
@@ -211,14 +227,14 @@ export default function MessageHistory({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-8 md:p-6 bg-gray-50">
-          <div className="flex items-center justify-between">
+        <div className="border-t border-gray-200 p-4 md:p-6 bg-gray-50 flex-shrink-0">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="text-sm text-gray-600">
               Total messages: <strong>{messages.length}</strong>
             </p>
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 font-semibold"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 font-semibold w-full sm:w-auto"
             >
               Close
             </button>
